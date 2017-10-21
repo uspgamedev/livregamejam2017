@@ -1,6 +1,7 @@
 
 local COLOR = require 'cpml.color'
 local MOUSE = require 'view.helpers.mouse'
+local GRAPH_LOGIC = require 'graph_logic'
 
 local GRAPH_UI = {}
 
@@ -26,6 +27,7 @@ function GRAPH_UI.load(n)
   for i=1,n do
     _nodes[i] = { glow = 0 }
   end
+  Font = love.graphics.newFont("/assets/fonts/ptserif.ttf", 18)
 end
 
 function GRAPH_UI.node(i, x, y)
@@ -41,6 +43,8 @@ function GRAPH_UI.node(i, x, y)
   _push('translate', x, y)
   _push('scale', scale, scale)
   _push('circle', 'fill', 0, 0, _RADIUS)
+  _push('setColor', 255, 255, 255)
+  _push('print', GRAPH_LOGIC.nodes()[i].pcs, -10, -13)
   _push('pop')
   return clicked
 end
@@ -79,6 +83,7 @@ end
 
 function GRAPH_UI.draw()
   local g = love.graphics
+  g.setFont(Font)
   for _,cmd in ipairs(_queue) do
     g[cmd[1]](unpack(cmd, 2))
   end
