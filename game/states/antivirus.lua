@@ -11,6 +11,12 @@ function ANTIVIRUS.load()
 end
 
 function ANTIVIRUS.update(dt)
+  ANTIVIRUS_HUD.update(dt)
+  if ANTIVIRUS_HUD.action('move_intel') then
+    print("move intel!")
+  end
+  ANTIVIRUS_HUD.action('move_intel')
+  ANTIVIRUS_HUD.action('move_intel')
   GRAPH_UI.update(dt)
   if GRAPH_UI.node(1, 200, 300) then
     print("node 1")

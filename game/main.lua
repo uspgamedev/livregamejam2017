@@ -1,4 +1,6 @@
 
+local MOUSE = require 'view.helpers.mouse'
+
 local gamestates = {
   virus = require 'states.virus',
   antivirus = require 'states.antivirus'
@@ -21,6 +23,7 @@ local function newState(state)
 end
 
 function love.update(dt)
+  MOUSE.update(dt)
   state.update(dt)
 end
 

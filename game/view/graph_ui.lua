@@ -1,6 +1,6 @@
 
 local COLOR = require 'cpml.color'
---local GRAPH_LOGIC = require 'graphic_logic'
+local MOUSE = require 'view.helpers.mouse'
 
 local GRAPH_UI = {}
 
@@ -14,10 +14,6 @@ local _EDGE_CLICK_WIDTH = 16
 local _EDGE_COLOR = COLOR(100, 100, 100, 255)
 
 local _queue = {}
-
-local _mouse_pos
-local _mouse_down
-local _mouse_clicked
 
 local _nodes = {}
 
@@ -33,9 +29,9 @@ function GRAPH_UI.load(n)
 end
 
 function GRAPH_UI.node(i, x, y)
-  local mx, my = unpack(_mouse_pos)
+  local mx, my = MOUSE.pos()
   local near = (mx - x)^2 + (my - y)^2 < (_RADIUS*_HOVER_SIZE)^2
-  local clicked = _mouse_clicked and near
+  local clicked = MOUSE.clicked() and near
   local glow = clicked and 1 or _nodes[i].glow
   local scale = near and _HOVER_SIZE or 1
   _nodes[i].glow = glow
@@ -50,7 +46,7 @@ function GRAPH_UI.node(i, x, y)
 end
 
 function GRAPH_UI.edge(i, j, state)
-  local mx, my = unpack(_mouse_pos)
+  local mx, my = MOUSE.pos()
   local ix, iy = unpack(_nodes[i].pos)
   local jx, jy = unpack(_nodes[j].pos)
   local ex, ey = jx-ix, jy-iy
@@ -72,14 +68,10 @@ function GRAPH_UI.edge(i, j, state)
   _push('setLineWidth', near and 4 or 1)
   _push('line', ix, iy, jx, jy)
 
-  return near and _mouse_clicked
+  return near and MOUSE.clicked()
 end
 
 function GRAPH_UI.update(dt)
-  _mouse_pos = { love.mouse.getPosition() }
-  local last = _mouse_down
-  _mouse_down = love.mouse.isDown(1)
-  _mouse_clicked = _mouse_down and not last
   for _,node in ipairs(_nodes) do
     node.glow = node.glow - node.glow*_DECAY*dt
   end
