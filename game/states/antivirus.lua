@@ -6,8 +6,8 @@ local ANTIVIRUS = {}
 
 local _ACTIONS = {
   'move_intel',
-  'move_intel',
-  'move_intel',
+  'lock_route',
+  'probe_cluster',
 }
 
 local MAP = {
@@ -19,6 +19,7 @@ local MAP = {
 local _selected = 0
 
 function ANTIVIRUS.load()
+  _selected = 0
   ANTIVIRUS_HUD.load()
 	GRAPH_UI.load(3)
   GRAPH_LOGIC.load(3)
