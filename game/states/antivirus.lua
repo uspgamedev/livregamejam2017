@@ -21,6 +21,13 @@ local MAP = {
 local _selected = 0
 local _turn_cooldown = 0
 
+local function getMidpoint(a, b)
+  x = (MAP[a][1] + MAP[b][1])/2
+  y = (MAP[a][2] + MAP[b][2])/2
+
+  return {x, y}
+end
+
 function ANTIVIRUS.load()
   _selected = 0
   ANTIVIRUS_HUD.load()
@@ -46,10 +53,20 @@ function ANTIVIRUS.update(dt)
 
   GRAPH_UI.update(dt)
 
+  -- Draw nodes
   for i=1,3 do
     GRAPH_UI.node(i, MAP[i][1], MAP[i][2])
   end
-  GRAPH_UI.edge(2, 3)
+
+  -- Draw edges
+  for i=1,#GRAPH_LOGIC.nodes() do
+    for j=i+1,#GRAPH_LOGIC.nodes() do
+      if GRAPH_LOGIC.edges()[i][j] then
+        GRAPH_UI.edge(i, j, GRAPH_LOGIC.edges()[i][j].weight, getMidpoint(i, j))
+      end
+    end
+  end
+
 end
 
 function ANTIVIRUS.draw()

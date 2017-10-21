@@ -49,7 +49,7 @@ function GRAPH_UI.node(i, x, y)
   return clicked
 end
 
-function GRAPH_UI.edge(i, j, state)
+function GRAPH_UI.edge(i, j, weight, midpoint)
   local mx, my = MOUSE.pos()
   local ix, iy = unpack(_nodes[i].pos)
   local jx, jy = unpack(_nodes[j].pos)
@@ -67,10 +67,14 @@ function GRAPH_UI.edge(i, j, state)
   local px, py = ix + p*ex, iy + p*ey
   local n = (mx-px)^2 + (my-py)^2
   local near = p >= 0 and p <= 1 and n < _EDGE_CLICK_WIDTH^2
-  
+
+  print(weight)
+  _push('setColor', 255, 255, 255, 255)
+  _push('print', weight, midpoint[1], midpoint[2])
   _push('setColor', _EDGE_COLOR)
   _push('setLineWidth', near and 4 or 1)
   _push('line', ix, iy, jx, jy)
+
 
   return near and MOUSE.clicked()
 end
