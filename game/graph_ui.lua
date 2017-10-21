@@ -3,6 +3,7 @@ local COLOR = require 'cpml.color'
 local GRAPH_UI = {}
 
 local _RADIUS = 16
+local _EDGE_CLICK_WIDTH = 16
 local _IDLE_COLOR = COLOR(0, 0, 255, 255)
 local _CLICKED_COLOR = COLOR(0, 255, 255, 255)
 local _EDGE_COLOR = COLOR(100, 100, 100, 255)
@@ -42,16 +43,20 @@ function GRAPH_UI.edge(i, j, state)
   local mx, my = unpack(_mouse_pos)
   local ix, iy = unpack(_nodes[i].pos)
   local jx, jy = unpack(_nodes[j].pos)
-  local edge_angle = math.atan2(jy - iy, jx - ix)
-  local mouse_angle = math.atan2(my - iy, mx - ix)
-  local rel_angle = mouse_angle - edge_angle
-  local x, y = math.cos(rel_angle), math.sin(rel_angle)
-  print(360*rel_angle/2*math.pi)
-  local near = math.abs(y) < 16 and x >= 0 and x*x <= (jx-ix)^2 + (jy-iy)^2
+  local ex, ey = jx-ix, jy-iy
+  local rx, ry = mx-ix, my-iy
+  local l = ex*ex + ey*ey
+  local d = ex*rx + ey*ry
+  local p = d/l
+  local px, py = ix + p*ex, iy + p*ey
+  local n = (mx-px)^2 + (my-py)^2
+  local near = p >= 0 and p <= 1 and n < _EDGE_CLICK_WIDTH^2
   
   _push('setColor', _EDGE_COLOR)
   _push('setLineWidth', near and 4 or 1)
   _push('line', ix, iy, jx, jy)
+
+  return near and _mouse_clicked
 end
 
 function GRAPH_UI.update(dt)
