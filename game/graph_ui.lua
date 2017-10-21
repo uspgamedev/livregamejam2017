@@ -1,5 +1,7 @@
 
 local COLOR = require 'cpml.color'
+--local GRAPH_LOGIC = require 'graphic_logic'
+
 local GRAPH_UI = {}
 
 local _RADIUS = 16

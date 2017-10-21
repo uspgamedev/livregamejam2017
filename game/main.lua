@@ -1,24 +1,31 @@
-
-local GRAPH_UI = require 'graph_ui'
-local GRAPH_LOGIC = require 'graph_logic'
+local gamestates = {virus = require 'states.virus', antivirus = require 'states.antivirus'}
+local state = gamestates.virus
 
 function love.load()
-  GRAPH_UI.load(3)
-  GRAPH_LOGIC.load(3)
+  state.load()  
+end
+
+local function newState(state)
+  if state == gamestates.virus then
+    state = gamestates.antivirus
+  else
+    state = gamestates.virus
+  end
+
+  return state
 end
 
 function love.update(dt)
-  GRAPH_UI.update(dt)
-  if GRAPH_UI.node(1, 200, 300) then
-    print("node 1")
-  end
-  GRAPH_UI.node(2, 500, 400)
-  GRAPH_UI.node(3, 600, 100)
-  if GRAPH_UI.edge(2, 3) then
-    print("edge 23")
+  state.update(dt)
+end
+
+function love.keypressed(key)
+  if key == 'space' then
+    state = newState(state)
+    state.load()
   end
 end
 
 function love.draw()
-  GRAPH_UI.draw()
+  state.draw()
 end
