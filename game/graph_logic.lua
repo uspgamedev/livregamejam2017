@@ -2,7 +2,7 @@
 local GRAPH_LOGIC = {}
 
 local _initialNode = 1 -- Test only variable
-local _resetInCons = 5 -- Test only variable
+local _resetInCons = 10 -- Chenge this at antivirus.lua too, when drawing edges
 local _testEdges = {{0, 5, 5},
                     {5, 0, 8},
                     {5, 8, 0}} -- Test only variable to simulate a file input
@@ -29,7 +29,7 @@ function newNode(capacity)
 end
 
 function newEdge(w)
-  return (w ~= 0) and { weight = w } or false
+  return (w ~= 0) and { weight = w, locked = false, resetIn = 0 } or false
 end
 
 function GRAPH_LOGIC.load(n)
@@ -43,7 +43,6 @@ function GRAPH_LOGIC.load(n)
   _nodes[_initialNode].resetIn = _resetInCons
   for i=1,n do
     _edges[i] = {}
-    -- Add file infos to edges
     for j=1,n do
       _edges[i][j] = (j < i) and _edges[j][i] or newEdge(_testEdges[i][j])
     end
@@ -178,11 +177,16 @@ function moveVirus(type, neighNodes)
   local neighNodes = {}
   for i=1,#_nodes do
     for j=i+1,#_nodes do
-      if _edges[i][j] then
+      if _edges[i][j] and not _edges[i][j].locked then
         if not _nodes[i].infected and _nodes[j].infected then
           table.insert(neighNodes, { ini = j, fin = i, passing = _edges[i][j].weight })
         elseif _nodes[i].infected and not _nodes[j].infected then
           table.insert(neighNodes, { ini = i, fin = j, passing = _edges[i][j].weight })
+        end
+      elseif _edges[i][j].locked then
+        _edges[i][j].resetIn = _edges[i][j].resetIn - 1
+        if _edges[i][j].resetIn == 0 then
+          _edges[i][j].locked = false
         end
       end
     end

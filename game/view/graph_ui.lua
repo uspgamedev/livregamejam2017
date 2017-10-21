@@ -14,6 +14,7 @@ local _DECAY = 5
 
 local _EDGE_CLICK_WIDTH = 16
 local _EDGE_COLOR = COLOR(100, 100, 100, 255)
+local _LOCKED_EDGE_COLOR = COLOR(255, 0, 0, 255)
 
 local _queue = {}
 
@@ -79,7 +80,11 @@ function GRAPH_UI.edge(i, j, weight, midpoint)
 
   _push('setColor', 255, 255, 255, 255)
   _push('print', weight, midpoint[1], midpoint[2])
-  _push('setColor', _EDGE_COLOR)
+  if GRAPH_LOGIC.edges()[i][j].locked then
+    _push('setColor', _LOCKED_EDGE_COLOR)
+  else
+    _push('setColor', _EDGE_COLOR)
+  end
   _push('setLineWidth', near and 4 or 1)
   _push('line', ix, iy, jx, jy)
 

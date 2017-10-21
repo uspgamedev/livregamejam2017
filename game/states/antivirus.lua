@@ -47,7 +47,7 @@ local function getMidpoint(a, b)
   yMid = (MAP[a][2] + MAP[b][2])/2
   x = (dY*norm)*k + xMid
   y = (-dX*norm)*k + yMid
-  
+
   return {x, y}
 end
 
@@ -77,6 +77,18 @@ function ANTIVIRUS.update(dt)
 
   GRAPH_UI.update(dt)
 
+  local action = _ACTIONS[_selected]
+
+  if action then
+    CURSOR.crosshairs()
+  else
+    CURSOR.pointer()
+  end
+
+  if MOUSE.clicked(2) then
+    _selected = 0
+  end
+
   -- Draw nodes
   for i=1,3 do
     GRAPH_UI.node(i, MAP[i][1], MAP[i][2])
@@ -85,21 +97,15 @@ function ANTIVIRUS.update(dt)
   -- Draw edges
   for i=1,#GRAPH_LOGIC.nodes() do
     for j=i+1,#GRAPH_LOGIC.nodes() do
-      if GRAPH_LOGIC.edges()[i][j] then
-        GRAPH_UI.edge(i, j, GRAPH_LOGIC.edges()[i][j].weight, getMidpoint(i, j))
+      if GRAPH_LOGIC.edges()[i][j] and
+         GRAPH_UI.edge(i, j, GRAPH_LOGIC.edges()[i][j].weight, getMidpoint(i, j)) then
+        if action == 'lock_route' then
+          GRAPH_LOGIC.edges()[i][j].locked = true
+          GRAPH_LOGIC.edges()[i][j].resetIn = 5
+          _selected = 0
+        end
       end
     end
-  end
-
-  if MOUSE.clicked(2) then
-    _selected = 0
-  end
-
-  local action = _ACTIONS[_selected]
-  if action then
-    CURSOR.crosshairs()
-  else
-    CURSOR.pointer()
   end
 
   for _,dir in ipairs(DIR) do
