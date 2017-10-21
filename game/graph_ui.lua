@@ -41,6 +41,10 @@ function GRAPH_UI.edge(i, j, state)
   local clicked = _mouse_clicked and (mx - x)^2 + (my - y)^2 < _RADIUS^2
 end
 
+function GRAPH_UI.addEdge(i, j)
+
+end
+
 function GRAPH_UI.update(dt)
   _mouse_pos = { love.mouse.getPosition() }
   local last = _mouse_down
@@ -59,4 +63,3 @@ function GRAPH_UI.draw()
 end
 
 return GRAPH_UI
-

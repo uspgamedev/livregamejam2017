@@ -1,8 +1,10 @@
 
 local GRAPH_UI = require 'graph_ui'
+local GRAPH_LOGIC = require 'graph_logic'
 
 function love.load()
   GRAPH_UI.load(3)
+  GRAPH_LOGIC.load(3)
 end
 
 function love.update(dt)
@@ -17,4 +19,3 @@ end
 function love.draw()
   GRAPH_UI.draw()
 end
-
