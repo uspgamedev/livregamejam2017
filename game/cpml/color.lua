@@ -9,7 +9,7 @@ local color_mt = {}
 local function new(r, g, b, a)
 	local c = { r, g, b, a }
 	c._c = c
-	return setmetatable(c, color)
+	return setmetatable(c, color_mt)
 end
 
 -- HSV utilities (adapted from http://www.cs.rit.edu/~ncs/color/t_convert.html)

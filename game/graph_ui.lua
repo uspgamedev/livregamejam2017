@@ -1,8 +1,11 @@
 
-local _RADIUS = 64
-local _IDLE_COLOR = { 0, 0, 255, 255 }
-
+local COLOR = require 'cpml.color'
 local GRAPH_UI = {}
+
+local _RADIUS = 16
+local _IDLE_COLOR = COLOR(0, 0, 255, 255)
+local _CLICKED_COLOR = COLOR(0, 255, 255, 255)
+local _DECAY = 0.05
 
 local _queue = {}
 
@@ -10,22 +13,38 @@ local _mouse_pos
 local _mouse_down
 local _mouse_clicked
 
-function GRAPH_UI.load()
+local _nodes = {}
+
+local function _push(...)
+  table.insert(_queue, {...})
 end
 
-function GRAPH_UI.node(x, y)
+function GRAPH_UI.load(n)
+  _nodes = {}
+  for i=1,n do
+    _nodes[i] = { glow = 0 }
+  end
+end
+
+function GRAPH_UI.node(i, x, y)
   local g = love.graphics
   local mx, my = unpack(_mouse_pos)
   local clicked = _mouse_clicked and (mx - x)^2 + (my - y)^2 < _RADIUS^2
-  g.setColor(_IDLE_COLOR)
+  local glow = clicked and 1 or _nodes[i].glow
+  _nodes[i].glow = glow
+  _push('setColor', COLOR.lerp(_IDLE_COLOR, _CLICKED_COLOR, glow))
+  _push('circle', 'fill', x, y, _RADIUS)
   return clicked
 end
 
-function GRAPH_UI.update()
+function GRAPH_UI.update(dt)
   _mouse_pos = { love.mouse.getPosition() }
   local last = _mouse_down
   _mouse_down = love.mouse.isDown(1)
   _mouse_clicked = _mouse_down and not last
+  for _,node in ipairs(_nodes) do
+    node.glow = node.glow - node.glow*_DECAY
+  end
 end
 
 function GRAPH_UI.draw()
