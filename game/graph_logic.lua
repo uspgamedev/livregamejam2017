@@ -2,6 +2,7 @@
 local GRAPH_LOGIC = {}
 
 local _initialNode = 1 -- Test only variable
+local _resetInCons = 5 -- Test only variable
 local _testEdges = {{0, 5, 5},
                     {5, 0, 8},
                     {5, 8, 0}} -- Test only variable to simulate a file input
@@ -23,7 +24,7 @@ function newNode(capacity)
     pcs = capacity,
     infectedPcs = 0,
     infected = false,
-    resetIn = 5
+    resetIn = 0
   }
 end
 
@@ -39,6 +40,7 @@ function GRAPH_LOGIC.load(n)
   end
   _nodes[_initialNode].infectedPcs = 10
   _nodes[_initialNode].infected = true
+  _nodes[_initialNode].resetIn = _resetInCons
   for i=1,n do
     _edges[i] = {}
     -- Add file infos to edges
@@ -83,6 +85,7 @@ function breadth(neighs)
         print(fin.infectedPcs, fin.pcs)
         if fin.infectedPcs == fin.pcs then
           fin.infected = true
+          fin.resetIn = _resetInCons
           notFullNodes = notFullNodes - 1
         end
         if neighs[i].passing == 0 then
@@ -106,6 +109,7 @@ function random(neighs)
       fin.infectedPcs = fin.infectedPcs + add
       pcounter = pcounter - add
       if fin.infectedPcs == fin.pcs then
+        fin.resetIn = _resetInCons
         fin.infected = true
       end
     end
@@ -125,6 +129,7 @@ function focusDepth(neighs)
       fin.infectedPcs = fin.infectedPcs + add
       counter = counter - add
       if fin.infectedPcs == fin.pcs then
+        fin.resetIn = _resetInCons
         fin.infected = true
       end
     end
@@ -157,6 +162,7 @@ function focusBreadth(neighs)
         print(fin.infectedPcs, fin.pcs)
         if fin.infectedPcs == fin.pcs then
           fin.infected = true
+          fin.resetIn = _resetInCons
           notFullNodes = notFullNodes - 1
         end
         if neighs[i].passing == 0 then
@@ -178,6 +184,13 @@ function moveVirus(type, neighNodes)
         elseif _nodes[i].infected and not _nodes[j].infected then
           table.insert(neighNodes, { ini = i, fin = j, passing = _edges[i][j].weight })
         end
+      end
+    end
+    if _nodes[i].infected then
+      _nodes[i].resetIn = _nodes[i].resetIn - 1
+      if _nodes[i].resetIn == 0 then
+        _nodes[i].infected = false
+        _nodes[i].infectedPcs = 0
       end
     end
   end
@@ -212,12 +225,12 @@ function moveVirus(type, neighNodes)
     focusBreadth(neighNodes)
   end
   for i,node in ipairs(_nodes) do
-    print(i, tostring(node.infectedPcs).."/"..tostring(node.pcs), node.infected)
+    print(i, tostring(node.infectedPcs).."/"..tostring(node.pcs), node.infected, node.resetIn)
   end
 end
 
 function GRAPH_LOGIC.turn()
-  moveVirus(1, neighNodes) -- Set the type of the move here
+  moveVirus(3, neighNodes) -- Set the type of the move here
 end
 
 function GRAPH_LOGIC.nodes()
