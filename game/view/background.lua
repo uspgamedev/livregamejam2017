@@ -5,7 +5,7 @@ local _EFFECT_CODE = [[
 extern vec2 size;
 extern number vpulse;
 extern number phase;
-const number MARGIN = 400;
+const number MARGIN = 300;
 const number DECAY = 300;
 const vec4 LIGHT = vec4(0.1,0.3,0.2,1);
 const vec4 LINE = vec4(0.3,0.1,0.2,1);
@@ -41,8 +41,8 @@ end
 
 function BG.update(dt)
   local w, h = love.graphics.getDimensions()
-  _pulse = math.fmod(_pulse + dt*5, 1)
-  _phase = math.fmod(_pulse + dt/4, 1)
+  _pulse = math.fmod(_pulse + dt*3, 1)
+  _phase = math.fmod(_pulse + dt/8, 1)
   _EFFECT_SHADER:send('vpulse', w*(2*_pulse - 1/2))
   _EFFECT_SHADER:send('phase', math.sin(_phase*math.pi))
 end
