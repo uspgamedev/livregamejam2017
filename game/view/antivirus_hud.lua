@@ -1,7 +1,11 @@
 
+local COLOR = require 'cpml.color'
 local MOUSE = require 'view.helpers.mouse'
+local FONT = require 'view.helpers.font'
+local GRAPH_LOGIC = require 'graph_logic'
 local ANTIVIRUS_HUD = {}
 
+local _TEXT_COLOR = COLOR(240, 240, 240, 255)
 local _RADIUS = 32
 
 local _GLOW_CODE = [[
@@ -84,6 +88,14 @@ function ANTIVIRUS_HUD.draw()
   end
   g.setColor(200, 200, 50, 255)
   g.rectangle('fill', 32, h - 32, _turn_progress*(w - 64), 4)
+  local total, infected = 0, 0
+  for _,node in ipairs(GRAPH_LOGIC.nodes()) do
+    total = total + node.pcs
+    infected = infected + node.infectedPcs
+  end
+  FONT.set(20)
+  g.setColor(_TEXT_COLOR)
+  g.print(("%d/%d"):format(infected, total), w - 100, 100)
 end
 
 return ANTIVIRUS_HUD
