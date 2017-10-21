@@ -1,5 +1,6 @@
 
 local MOUSE = require 'view.helpers.mouse'
+local CURSOR = require 'view.cursor'
 local BG = require 'view.background'
 
 local gamestates = {
@@ -11,6 +12,7 @@ local state = gamestates.virus
 
 function love.load()
   BG.load()
+  CURSOR.load()
   state.load()
 end
 
