@@ -32,7 +32,7 @@ function ANTIVIRUS.load()
   _selected = 0
   ANTIVIRUS_HUD.load()
 	GRAPH_UI.load(3)
-  GRAPH_LOGIC.load(7)
+  GRAPH_LOGIC.load(3)
 end
 
 function ANTIVIRUS.update(dt)
@@ -79,4 +79,3 @@ function ANTIVIRUS.iterateVirus()
 end
 
 return ANTIVIRUS
-

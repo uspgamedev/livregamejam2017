@@ -2,17 +2,17 @@
 local GRAPH_LOGIC = {}
 
 local _initialNode = 1 -- Test only variable
---[[local _testEdges = {{0, 5, 0},
+local _testEdges = {{0, 5, 0},
                     {5, 0, 8},
-                    {0, 8, 0}} -- Test only variable to simulate a file input]]
+                    {0, 8, 0}} -- Test only variable to simulate a file input
 
-local _testEdges = {{0, 5, 3, 7, 11, 0, 0},
+--[[local _testEdges = {{0, 5, 3, 7, 11, 0, 0},
                     {5, 0, 0, 0, 0, 0, 0},
                     {3, 0, 0, 0, 0, 0, 0},
                     {7, 0, 0, 0, 0, 0, 0},
                     {11, 0, 0, 0, 0, 2, 5},
                     {0, 0, 0, 0, 2, 0, 0},
-                    {0, 0, 0, 0, 5, 0, 0}}
+                    {0, 0, 0, 0, 5, 0, 0}}]] -- Test only variable to simulate a file input
 local _power = 10
 local _lastInfected = false
 local _nodes = {}
