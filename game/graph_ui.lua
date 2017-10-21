@@ -5,7 +5,7 @@ local GRAPH_UI = {}
 local _RADIUS = 16
 local _IDLE_COLOR = COLOR(0, 0, 255, 255)
 local _CLICKED_COLOR = COLOR(0, 255, 255, 255)
-local _DECAY = 0.05
+local _DECAY = 5
 
 local _queue = {}
 
@@ -27,7 +27,6 @@ function GRAPH_UI.load(n)
 end
 
 function GRAPH_UI.node(i, x, y)
-  local g = love.graphics
   local mx, my = unpack(_mouse_pos)
   local clicked = _mouse_clicked and (mx - x)^2 + (my - y)^2 < _RADIUS^2
   local glow = clicked and 1 or _nodes[i].glow
@@ -37,13 +36,18 @@ function GRAPH_UI.node(i, x, y)
   return clicked
 end
 
+function GRAPH_UI.edge(i, j, state)
+  local mx, my = unpack(_mouse_pos)
+  local clicked = _mouse_clicked and (mx - x)^2 + (my - y)^2 < _RADIUS^2
+end
+
 function GRAPH_UI.update(dt)
   _mouse_pos = { love.mouse.getPosition() }
   local last = _mouse_down
   _mouse_down = love.mouse.isDown(1)
   _mouse_clicked = _mouse_down and not last
   for _,node in ipairs(_nodes) do
-    node.glow = node.glow - node.glow*_DECAY
+    node.glow = node.glow - node.glow*_DECAY*dt
   end
 end
 
