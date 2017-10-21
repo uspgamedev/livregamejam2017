@@ -2,18 +2,23 @@
 local GRAPH_LOGIC = {}
 
 local _initialNode = 1 -- Test only variable
-local _resetInCons = 10 -- Chenge this at antivirus.lua too, when drawing edges
-local _testEdges = {{0, 5, 5},
-                    {5, 0, 8},
-                    {5, 8, 0}} -- Test only variable to simulate a file input
 
---[[local _testEdges = {{0, 5, 3, 7, 11, 0, 0},
-                    {5, 0, 0, 0, 0, 0, 0},
-                    {3, 0, 0, 0, 0, 0, 0},
-                    {7, 0, 0, 0, 0, 0, 0},
-                    {11, 0, 0, 0, 0, 2, 5},
-                    {0, 0, 0, 0, 2, 0, 0},
-                    {0, 0, 0, 0, 5, 0, 0}}]] -- Test only variable to simulate a file input
+local _resetInCons = 10 -- Change this at antivirus.lua too, when drawing edges
+local files = love.filesystem.getDirectoryItems("maps")
+local maps = {}
+for k, file in ipairs(files) do
+	file = string.sub(file, 1, -5)
+	table.insert(maps, require('maps.' .. file))
+end
+
+for i=1, 10 do
+	rand = love.math.random(1, #maps)
+	print(rand, #maps)
+end
+local map = maps[rand] 
+
+local _testEdges = map['edges'] -- Test only variable to simulate a file input
+
 local _power = 4
 local _lastInfected = false
 local _nodes = {}
@@ -33,28 +38,30 @@ function newEdge(w)
 end
 
 function GRAPH_LOGIC.load(n)
+
   _nodes = {}
   _edges = {}
   for i=1,n do
-    _nodes[i] = newNode(10*i)
+	_nodes[i] = newNode(map['capacity'][i])
   end
   _nodes[_initialNode].infectedPcs = 10
   _nodes[_initialNode].infected = true
   _nodes[_initialNode].resetIn = _resetInCons
   for i=1,n do
-    _edges[i] = {}
-    for j=1,n do
-      _edges[i][j] = (j < i) and _edges[j][i] or newEdge(_testEdges[i][j])
-    end
+		_edges[i] = {}
+		-- Add file infos to edges
+		for j=1,n do
+		  _edges[i][j] = (j < i) and _edges[j][i] or newEdge(_testEdges[i][j])
+		end
   end
   for i,line in ipairs(_edges) do
-    for j,edge in ipairs(_edges[i]) do
-      if not edge then
-        print(i, j, "false")
-      else
-        print(i, j, edge.weight)
-      end
-    end
+	for j,edge in ipairs(_edges[i]) do
+	  if not edge then
+		print(i, j, "false")
+	  else
+		print(i, j, edge.weight)
+	  end
+	end
   end
 end
 
@@ -146,7 +153,7 @@ function focusBreadth(neighs)
   fin.infectedPcs = fin.infectedPcs + add
   counter = counter - add
   if fin.infectedPcs == fin.pcs then
-    fin.infected = true
+	fin.infected = true
   end
   while (counter ~= 0 and not finish) do
     finish = true
@@ -183,7 +190,7 @@ function moveVirus(type, neighNodes)
         elseif _nodes[i].infected and not _nodes[j].infected then
           table.insert(neighNodes, { ini = i, fin = j, passing = _edges[i][j].weight })
         end
-      elseif _edges[i][j].locked then
+      elseif _edges[i][j] and _edges[i][j].locked then
         _edges[i][j].resetIn = _edges[i][j].resetIn - 1
         if _edges[i][j].resetIn == 0 then
           _edges[i][j].locked = false
@@ -199,34 +206,34 @@ function moveVirus(type, neighNodes)
     end
   end
   if #neighNodes == 0 then
-    print("Virus win!!!")
-    return
+	print("Virus win!!!")
+	return
   end
   for i,edge in ipairs(neighNodes) do
-    print(i, tostring(edge.ini)..','..tostring(edge.fin), edge.passing)
+	print(i, tostring(edge.ini)..','..tostring(edge.fin), edge.passing)
   end
   if type == 0 then
-    print('BFS')
-    breadth(neighNodes)
+	print('BFS')
+	breadth(neighNodes)
   elseif type == 1 then
-    print('Random')
-    random(neighNodes)
+	print('Random')
+	random(neighNodes)
   elseif type == 2 then
-    print('Depth greedy')
-    table.sort(neighNodes, compareD)
-    focusDepth(neighNodes)
+	print('Depth greedy')
+	table.sort(neighNodes, compareD)
+	focusDepth(neighNodes)
   elseif type == 3 then
-    print('Depth humble')
-    table.sort(neighNodes, compareA)
-    focusDepth(neighNodes)
+	print('Depth humble')
+	table.sort(neighNodes, compareA)
+	focusDepth(neighNodes)
   elseif type == 4 then
-    print('Beadth greedy')
-    table.sort(neighNodes, compareD)
-    focusBreadth(neighNodes)
+	print('Beadth greedy')
+	table.sort(neighNodes, compareD)
+	focusBreadth(neighNodes)
   elseif type == 5 then
-    print('Beadth humble')
-    table.sort(neighNodes, compareA)
-    focusBreadth(neighNodes)
+	print('Beadth humble')
+	table.sort(neighNodes, compareA)
+	focusBreadth(neighNodes)
   end
   for i,node in ipairs(_nodes) do
     print(i, tostring(node.infectedPcs).."/"..tostring(node.pcs), node.infected, node.resetIn)
@@ -243,6 +250,14 @@ end
 
 function GRAPH_LOGIC.edges()
   return _edges
+end
+
+function GRAPH_LOGIC.total()
+	return map['total']
+end
+
+function GRAPH_LOGIC.map()
+	return map['map']
 end
 
 return GRAPH_LOGIC
