@@ -1,5 +1,6 @@
 
 local _RADIUS = 64
+local _IDLE_COLOR = { 0, 0, 255, 255 }
 
 local GRAPH_UI = {}
 
@@ -16,7 +17,7 @@ function GRAPH_UI.node(x, y)
   local g = love.graphics
   local mx, my = unpack(_mouse_pos)
   local clicked = _mouse_clicked and (mx - x)^2 + (my - y)^2 < _RADIUS^2
-  g.setColor()
+  g.setColor(_IDLE_COLOR)
   return clicked
 end
 
