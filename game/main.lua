@@ -1,4 +1,11 @@
-local gamestates = {virus = require 'states.virus', antivirus = require 'states.antivirus'}
+
+local MOUSE = require 'view.helpers.mouse'
+
+local gamestates = {
+  virus = require 'states.virus',
+  antivirus = require 'states.antivirus'
+}
+
 local state = gamestates.virus
 
 function love.load()
@@ -16,6 +23,7 @@ local function newState(state)
 end
 
 function love.update(dt)
+  MOUSE.update(dt)
   state.update(dt)
 end
 
@@ -29,3 +37,4 @@ end
 function love.draw()
   state.draw()
 end
+
