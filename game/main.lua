@@ -9,7 +9,7 @@ local gamestates = {
 local state = gamestates.virus
 
 function love.load()
-  state.load()  
+  state.load()
 end
 
 local function newState(state)
@@ -32,9 +32,11 @@ function love.keypressed(key)
     state = newState(state)
     state.load()
   end
+  if key == 'l' then
+    state.iterateVirus()
+  end
 end
 
 function love.draw()
   state.draw()
 end
-

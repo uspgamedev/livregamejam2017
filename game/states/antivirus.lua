@@ -20,7 +20,6 @@ end
 
 function ANTIVIRUS.update(dt)
   ANTIVIRUS_HUD.update(dt)
-  print(GRAPH_LOGIC.nodes()[1].infectedPcs)
   for i,action in ipairs(_ACTIONS) do
     if ANTIVIRUS_HUD.action(action, i == _selected) then
       _selected = i
@@ -41,6 +40,10 @@ end
 function ANTIVIRUS.draw()
 	GRAPH_UI.draw()
   ANTIVIRUS_HUD.draw()
+end
+
+function ANTIVIRUS.iterateVirus()
+  GRAPH_LOGIC.turn()
 end
 
 return ANTIVIRUS
