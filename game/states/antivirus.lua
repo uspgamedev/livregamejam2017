@@ -6,8 +6,8 @@ local ANTIVIRUS = {}
 
 local _ACTIONS = {
   'move_intel',
-  'move_intel',
-  'move_intel',
+  'lock_route',
+  'probe_cluster',
 }
 
 local _selected = 0
