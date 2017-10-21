@@ -16,7 +16,7 @@ function GRAPH_UI.node(x, y)
   local g = love.graphics
   local mx, my = unpack(_mouse_pos)
   local clicked = _mouse_clicked and (mx - x)^2 + (my - y)^2 < _RADIUS^2
-  g.setColor(
+  g.setColor()
   return clicked
 end
 
