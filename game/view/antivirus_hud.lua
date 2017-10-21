@@ -46,7 +46,7 @@ function ANTIVIRUS_HUD.action(action_name, selected)
   local x, y = _iconPos(#_actions)
   local mx, my = MOUSE.pos()
   local near = (mx - x)^2 + (my - y)^2 < _RADIUS^2
-  local clicked = MOUSE.clicked() and near
+  local clicked = MOUSE.clicked(1) and near
   table.insert(
     _actions,
     {
@@ -55,7 +55,10 @@ function ANTIVIRUS_HUD.action(action_name, selected)
       selected = selected
     }
   )
-  return near and clicked
+  if near and clicked then
+    _glow_phase = 0
+    return true
+  end
 end
 
 function ANTIVIRUS_HUD.turnClock(progress)

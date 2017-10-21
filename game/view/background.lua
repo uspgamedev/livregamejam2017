@@ -20,7 +20,7 @@ vec4 effect(vec4 color, Image _unused1, vec2 _unused2, vec2 pos) {
                       max(top, min(bottom, pos.y)));
   number dist = max(0.2, min(distance(nearest, pos)/DECAY, 1));
   number vline = smoothstep(0.98, 1.0, sin(pos.x/6));
-  vline *= (1 + 1/max(0.5,distance(vpulse, pos.x))*phase);
+  vline *= (1 + 1/max(0.5,distance(vpulse, pos.x)/8)*phase);
   number hline = smoothstep(0.98, 1.0, sin(pos.y/6));
   return dist*LIGHT + max(vline, hline)*LIGHT*dist;
 }
@@ -29,22 +29,25 @@ vec4 effect(vec4 color, Image _unused1, vec2 _unused2, vec2 pos) {
 
 local _EFFECT_SHADER
 
+local _PULSE_DELAY = 0.5
+
 local _pulse
-local _phase
 
 function BG.load()
   _EFFECT_SHADER = love.graphics.newShader(_EFFECT_CODE)
   _EFFECT_SHADER:send('size', { love.graphics.getDimensions() })
-  _phase = 0
   _pulse = 0
 end
 
 function BG.update(dt)
   local w, h = love.graphics.getDimensions()
-  _pulse = math.fmod(_pulse + dt*3, 1)
-  _phase = math.fmod(_pulse + dt/8, 1)
-  _EFFECT_SHADER:send('vpulse', w*(2*_pulse - 1/2))
-  _EFFECT_SHADER:send('phase', math.sin(_phase*math.pi))
+  _pulse = _pulse + dt
+  _EFFECT_SHADER:send('phase',
+                      math.min(1,2*math.sin(_pulse/_PULSE_DELAY*math.pi)))
+  if _pulse >= _PULSE_DELAY then
+    _EFFECT_SHADER:send('vpulse', love.math.random(w/6)*6)
+    _pulse = 0
+  end
 end
 
 function BG.draw()

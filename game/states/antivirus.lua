@@ -1,4 +1,6 @@
 
+local CURSOR = require 'view.cursor'
+local MOUSE = require 'view.helpers.mouse'
 local GRAPH_LOGIC = require 'graph_logic'
 local GRAPH_UI = require 'view.graph_ui'
 local ANTIVIRUS_HUD = require 'view.antivirus_hud'
@@ -13,7 +15,7 @@ local _ACTIONS = {
 }
 
 local MAP = {
-  {200, 300}, 
+  {200, 300},
   {500, 400},
   {600, 100},
 }
@@ -43,17 +45,18 @@ function ANTIVIRUS.load()
 end
 
 function ANTIVIRUS.update(dt)
+  -- Calculate turn time
   _turn_cooldown = _turn_cooldown + dt
   while _turn_cooldown >= _TURN_TIME do
     GRAPH_LOGIC.turn()
     _turn_cooldown = _turn_cooldown - _TURN_TIME
   end
 
+  -- Draw HUD
   ANTIVIRUS_HUD.update(dt)
   for i,action in ipairs(_ACTIONS) do
     if ANTIVIRUS_HUD.action(action, i == _selected) then
-      _selected = i
-      print("action", i, action)
+      _selected = _selected == i and 0 or i
     end
   end
   ANTIVIRUS_HUD.turnClock(_turn_cooldown/_TURN_TIME)
@@ -74,6 +77,17 @@ function ANTIVIRUS.update(dt)
     end
   end
 
+  if MOUSE.clicked(2) then
+    _selected = 0
+  end
+
+  local action = _ACTIONS[_selected]
+  if action then
+    CURSOR.crosshairs()
+  else
+    CURSOR.pointer()
+  end
+
 end
 
 function ANTIVIRUS.draw()
@@ -86,4 +100,3 @@ function ANTIVIRUS.iterateVirus()
 end
 
 return ANTIVIRUS
-
