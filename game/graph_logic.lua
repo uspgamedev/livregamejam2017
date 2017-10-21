@@ -8,12 +8,37 @@ local _lastInfected = false
 local _nodes = {}
 local _edges = {}
 
+function GRAPH_LOGIC.load(n)
+  _nodes = {}
+  _edges = {}
+  for i=1,n do
+    _nodes[i] = { pcs = 10*i, infectedPcs = 0, infected = false }
+  end
+  _nodes[_initialNode] = { pcs = 10, infectedPcs = 10, infected = true }
+  for i=1,n do
+    _edges[i] = {}
+    -- Add file infos to edges
+    for j=1,n do
+      _edges[i][j] = (_testEdges[i][j] ~= 0) and ((j < i) and _edges[j][i] or { weight = _testEdges[i][j] }) or false
+    end
+  end
+  for i,line in ipairs(_edges) do
+    for j,edge in ipairs(_edges[i]) do
+      if not edge then
+        print(i, j, "false")
+      else
+        print(i, j, edge.weight)
+      end
+    end
+  end
+end
+
 local function compare(a, b)
-  return a.fin.pcs < b.fin.pcs
+  return _nodes[a.fin].pcs < _nodes[b.fin].pcs
 end
 
 function bfsWeight(neighs)
-  local finish = true
+  local finish = false
   local counter = _power
   local notFullNodes = #neighs
   local avg = _power/#neighs
@@ -37,24 +62,7 @@ function bfsWeight(neighs)
   end
 end
 
-function GRAPH_LOGIC.load(n)
-  _nodes = {}
-  _edges = {}
-  for i=1,n do
-    _nodes[i] = { pcs = 10*i, infectedPcs = 0, infected = false }
-  end
-  _nodes[_initialNode] = { pcs = 10, infectedPcs = 10, infected = true }
-  for i=1,n do
-    _edges[i] = {}
-    -- Add file infos to edges
-    for j=1,n do
-      _edges[i][j] = (_testEdges[i] ~= 0) and ((j < i) and _edges[j][i] or { weight = 5 }) or false
-    end
-  end
-  -- Add initial node to _infectedNodes Nodes
-end
-
-function GRAPH_LOGIC.update(dt)
+function GRAPH_LOGIC.turn()
   local neighNodes = {}
   for i=1,#_nodes do
     for j=i+1,#_nodes do
@@ -68,7 +76,13 @@ function GRAPH_LOGIC.update(dt)
     end
   end
   table.sort(neighNodes, compare)
+  for i,edge in ipairs(neighNodes) do
+    print(i, edge.ini, ',', edge.fin, edge.passing)
+  end
   bfsWeight(neighNodes)
+  for i,node in ipairs(_nodes) do
+    print(i, node.infectedPcs, "/", node.pcs, node.infected)
+  end
 end
 
 GRAPH_LOGIC.nodes = _nodes
