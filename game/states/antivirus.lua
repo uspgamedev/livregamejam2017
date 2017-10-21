@@ -48,7 +48,7 @@ function ANTIVIRUS.update(dt)
   ANTIVIRUS_HUD.update(dt)
   for i,action in ipairs(_ACTIONS) do
     if ANTIVIRUS_HUD.action(action, i == _selected) then
-      _selected = i
+      _selected = _selected == i and 0 or i
     end
   end
   ANTIVIRUS_HUD.turnClock(_turn_cooldown/_TURN_TIME)
@@ -70,7 +70,7 @@ function ANTIVIRUS.update(dt)
   end
 
   local action = _ACTIONS[_selected]
-  if action == 'move_intel' then
+  if action then
     CURSOR.crosshairs()
   else
     CURSOR.pointer()

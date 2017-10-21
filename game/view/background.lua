@@ -42,7 +42,8 @@ end
 function BG.update(dt)
   local w, h = love.graphics.getDimensions()
   _pulse = _pulse + dt
-  _EFFECT_SHADER:send('phase', math.sin(_pulse/_PULSE_DELAY*math.pi))
+  _EFFECT_SHADER:send('phase',
+                      math.min(1,2*math.sin(_pulse/_PULSE_DELAY*math.pi)))
   if _pulse >= _PULSE_DELAY then
     _EFFECT_SHADER:send('vpulse', love.math.random(w/6)*6)
     _pulse = 0
