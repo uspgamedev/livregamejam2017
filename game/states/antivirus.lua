@@ -1,13 +1,22 @@
-local GRAPH_UI = require 'graph_ui'
+
 local GRAPH_LOGIC = require 'graph_logic'
+local GRAPH_UI = require 'view.graph_ui'
+local ANTIVIRUS_HUD = require 'view.antivirus_hud'
 local ANTIVIRUS = {}
 
 function ANTIVIRUS.load()
+  ANTIVIRUS_HUD.load()
 	GRAPH_UI.load(3)
   GRAPH_LOGIC.load(3)	
 end
 
 function ANTIVIRUS.update(dt)
+  ANTIVIRUS_HUD.update(dt)
+  if ANTIVIRUS_HUD.action('move_intel') then
+    print("move intel!")
+  end
+  ANTIVIRUS_HUD.action('move_intel')
+  ANTIVIRUS_HUD.action('move_intel')
   GRAPH_UI.update(dt)
   if GRAPH_UI.node(1, 200, 300) then
     print("node 1")
@@ -21,6 +30,8 @@ end
 
 function ANTIVIRUS.draw()
 	GRAPH_UI.draw()
+  ANTIVIRUS_HUD.draw()
 end
 
 return ANTIVIRUS
+
