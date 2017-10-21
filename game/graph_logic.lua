@@ -13,7 +13,7 @@ local _testEdges = {{0, 5, 5},
                     {11, 0, 0, 0, 0, 2, 5},
                     {0, 0, 0, 0, 2, 0, 0},
                     {0, 0, 0, 0, 5, 0, 0}}]] -- Test only variable to simulate a file input
-local _power = 3
+local _power = 4
 local _lastInfected = false
 local _nodes = {}
 local _edges = {}
@@ -80,8 +80,24 @@ function breadth(neighs)
   end
 end
 
-function depth(neighs)
-  print("Not implemented yet D:")
+function random(neighs)
+  local finish = false
+  local pcounter = _power
+  local ncounter = 0
+  local r = math.random(#neighs)
+  local fin = _nodes[neighs[r].fin]
+  while pcounter ~= 0 and ncounter ~= #neighs do
+    if not fin.infected then
+      local add = math.min(fin.pcs-fin.infectedPcs, pcounter, neighs[r].passing)
+      fin.infectedPcs = fin.infectedPcs + add
+      pcounter = pcounter - add
+      if fin.infectedPcs == fin.pcs then
+        fin.infected = true
+      end
+    end
+    fin = _nodes[neighs[math.random(#neighs)].fin]
+    ncounter = ncounter + 1
+  end
 end
 
 function focusDepth(neighs)
@@ -103,7 +119,39 @@ function focusDepth(neighs)
 end
 
 function focusBreadth(neighs)
-  print('Not implemented yet D:')
+  local finish = false
+  local counter = _power
+  local notFullNodes = #neighs - 1
+  local avg = _power/(#neighs-1)
+  local fin = _nodes[neighs[1].fin]
+  local add = math.min(fin.pcs-fin.infectedPcs, counter, neighs[1].passing)
+  fin.infectedPcs = fin.infectedPcs + add
+  counter = counter - add
+  if fin.infectedPcs == fin.pcs then
+    fin.infected = true
+  end
+  while (counter ~= 0 and not finish) do
+    finish = true
+    avg = counter/notFullNodes
+    for i=2,#neighs do
+      fin = _nodes[neighs[i].fin]
+      if not fin.infected and neighs[i].passing ~= 0 then
+        add = math.min(fin.pcs-fin.infectedPcs, avg, counter, neighs[i].passing)
+        fin.infectedPcs = fin.infectedPcs + add
+        neighs[i].passing = neighs[i].passing - add
+        counter = counter - add
+        print(fin.infectedPcs, fin.pcs)
+        if fin.infectedPcs == fin.pcs then
+          fin.infected = true
+          notFullNodes = notFullNodes - 1
+        end
+        if neighs[i].passing == 0 then
+          notFullNodes = notFullNodes - 1
+        end
+        finish = false
+      end
+    end
+  end
 end
 
 function moveVirus(type, neighNodes)
@@ -119,6 +167,10 @@ function moveVirus(type, neighNodes)
       end
     end
   end
+  if #neighNodes == 0 then
+    print("Virus win!!!")
+    return
+  end
   for i,edge in ipairs(neighNodes) do
     print(i, tostring(edge.ini)..','..tostring(edge.fin), edge.passing)
   end
@@ -126,8 +178,8 @@ function moveVirus(type, neighNodes)
     print('BFS')
     breadth(neighNodes)
   elseif type == 1 then
-    print('DFS')
-    depth(neighNodes)
+    print('Random')
+    random(neighNodes)
   elseif type == 2 then
     print('Depth greedy')
     table.sort(neighNodes, compareD)
@@ -151,7 +203,7 @@ function moveVirus(type, neighNodes)
 end
 
 function GRAPH_LOGIC.turn()
-  moveVirus(3, neighNodes)
+  moveVirus(1, neighNodes) -- Set the type of the move here
 end
 
 function GRAPH_LOGIC.nodes()
