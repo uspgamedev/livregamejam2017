@@ -1,4 +1,5 @@
 
+local VEC2 = require 'cpml.vec2'
 local CURSOR = require 'view.cursor'
 local MOUSE = require 'view.helpers.mouse'
 local GRAPH_LOGIC = require 'graph_logic'
@@ -18,6 +19,19 @@ local MAP = {
   {200, 300},
   {500, 400},
   {600, 100},
+}
+
+local DIR = {
+  'left', 'right', 'up', 'down',
+  'a', 'd', 'w', 's',
+  left = VEC2(-1,0),
+  a = VEC2(-1,0),
+  right = VEC2(1,0),
+  d = VEC2(1,0),
+  up = VEC2(0,-1),
+  w = VEC2(0,-1),
+  down = VEC2(0,1),
+  s = VEC2(0,1),
 }
 
 local _selected = 0
@@ -86,6 +100,12 @@ function ANTIVIRUS.update(dt)
     CURSOR.crosshairs()
   else
     CURSOR.pointer()
+  end
+
+  for _,dir in ipairs(DIR) do
+    if love.keyboard.isDown(dir) then
+      GRAPH_UI.moveCamera((DIR[dir]*(dt*200)):unpack())
+    end
   end
 
 end

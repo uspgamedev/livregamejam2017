@@ -1,5 +1,6 @@
 
 local COLOR = require 'cpml.color'
+local VEC2 = require 'cpml.vec2'
 local MOUSE = require 'view.helpers.mouse'
 local GRAPH_LOGIC = require 'graph_logic'
 
@@ -17,9 +18,17 @@ local _EDGE_COLOR = COLOR(100, 100, 100, 255)
 local _queue = {}
 
 local _nodes = {}
+local _camera = VEC2(0, 0)
 
 local function _push(...)
   table.insert(_queue, {...})
+end
+
+local function _mousePos()
+  local mx, my = MOUSE.pos()
+  mx = mx + _camera.x
+  my = my + _camera.y
+  return mx, my
 end
 
 function GRAPH_UI.load(n)
@@ -31,7 +40,7 @@ function GRAPH_UI.load(n)
 end
 
 function GRAPH_UI.node(i, x, y)
-  local mx, my = MOUSE.pos()
+  local mx, my = _mousePos()
   local near = (mx - x)^2 + (my - y)^2 < (_RADIUS*_HOVER_SIZE)^2
   local clicked = MOUSE.clicked(1) and near
   local glow = clicked and 1 or _nodes[i].glow
@@ -50,7 +59,7 @@ function GRAPH_UI.node(i, x, y)
 end
 
 function GRAPH_UI.edge(i, j, weight, midpoint)
-  local mx, my = MOUSE.pos()
+  local mx, my = _mousePos()
   local ix, iy = unpack(_nodes[i].pos)
   local jx, jy = unpack(_nodes[j].pos)
   local ex, ey = jx-ix, jy-iy
@@ -78,6 +87,10 @@ function GRAPH_UI.edge(i, j, weight, midpoint)
   return near and MOUSE.clicked(1)
 end
 
+function GRAPH_UI.moveCamera(dx, dy)
+  _camera = _camera + VEC2(dx, dy)
+end
+
 function GRAPH_UI.update(dt)
   for _,node in ipairs(_nodes) do
     node.glow = node.glow - node.glow*_DECAY*dt
@@ -86,10 +99,13 @@ end
 
 function GRAPH_UI.draw()
   local g = love.graphics
+  g.push()
+  g.translate((-_camera):unpack())
   g.setFont(Font)
   for _,cmd in ipairs(_queue) do
     g[cmd[1]](unpack(cmd, 2))
   end
+  g.pop()
   _queue = {}
 end
 
