@@ -1,4 +1,5 @@
 
+local CURSOR = require 'view.cursor'
 local GRAPH_LOGIC = require 'graph_logic'
 local GRAPH_UI = require 'view.graph_ui'
 local ANTIVIRUS_HUD = require 'view.antivirus_hud'
@@ -36,17 +37,18 @@ function ANTIVIRUS.load()
 end
 
 function ANTIVIRUS.update(dt)
+  -- Calculate turn time
   _turn_cooldown = _turn_cooldown + dt
   while _turn_cooldown >= _TURN_TIME do
     GRAPH_LOGIC.turn()
     _turn_cooldown = _turn_cooldown - _TURN_TIME
   end
 
+  -- Draw HUD
   ANTIVIRUS_HUD.update(dt)
   for i,action in ipairs(_ACTIONS) do
     if ANTIVIRUS_HUD.action(action, i == _selected) then
       _selected = i
-      print("action", i, action)
     end
   end
   ANTIVIRUS_HUD.turnClock(_turn_cooldown/_TURN_TIME)
@@ -65,6 +67,13 @@ function ANTIVIRUS.update(dt)
         GRAPH_UI.edge(i, j, GRAPH_LOGIC.edges()[i][j].weight, getMidpoint(i, j))
       end
     end
+  end
+
+  local action = _ACTIONS[_selected]
+  if action == 'move_intel' then
+    CURSOR.crosshairs()
+  else
+    CURSOR.pointer()
   end
 
 end
