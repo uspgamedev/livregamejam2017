@@ -1,4 +1,9 @@
-local gamestates = {virus = require 'states.virus', antivirus = require 'states.antivirus'}
+
+local gamestates = {
+  virus = require 'states.virus',
+  antivirus = require 'states.antivirus'
+}
+
 local state = gamestates.virus
 
 function love.load()
@@ -29,3 +34,4 @@ end
 function love.draw()
   state.draw()
 end
+

@@ -1,8 +1,11 @@
+
 local GRAPH_UI = require 'graph_ui'
 local GRAPH_LOGIC = require 'graph_logic'
+local ANTIVIRUS_HUD = require 'antivirus_hud'
 local ANTIVIRUS = {}
 
 function ANTIVIRUS.load()
+  ANTIVIRUS_HUD.load()
 	GRAPH_UI.load(3)
   GRAPH_LOGIC.load(3)	
 end
@@ -21,6 +24,8 @@ end
 
 function ANTIVIRUS.draw()
 	GRAPH_UI.draw()
+  ANTIVIRUS_HUD.draw()
 end
 
 return ANTIVIRUS
+
