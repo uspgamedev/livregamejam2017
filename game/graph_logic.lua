@@ -85,7 +85,12 @@ function GRAPH_LOGIC.turn()
   end
 end
 
-GRAPH_LOGIC.nodes = _nodes
-GRAPH_LOGIC.edges = _edges
+function GRAPH_LOGIC.nodes()
+  return _nodes
+end
+
+function GRAPH_LOGIC.edges()
+  return _edges
+end
 
 return GRAPH_LOGIC
