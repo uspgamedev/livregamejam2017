@@ -2,12 +2,13 @@
 local COLOR = require 'cpml.color'
 local VEC2 = require 'cpml.vec2'
 local MOUSE = require 'view.helpers.mouse'
+local FONT = require 'view.helpers.font'
 local GRAPH_LOGIC = require 'graph_logic'
 
 local GRAPH_UI = {}
 
-local _RADIUS = 16
-local _IDLE_COLOR = COLOR(0, 0, 255, 255)
+local _RADIUS = 24
+local _IDLE_COLOR = COLOR(101, 141, 206, 255)
 local _HOVER_SIZE = 1.2
 local _CLICKED_COLOR = COLOR(0, 255, 255, 255)
 local _DECAY = 5
@@ -37,7 +38,6 @@ function GRAPH_UI.load(n)
   for i=1,n do
     _nodes[i] = { glow = 0 }
   end
-  Font = love.graphics.newFont("/assets/fonts/ptserif.ttf", 18)
 end
 
 function GRAPH_UI.node(i, x, y)
@@ -52,9 +52,13 @@ function GRAPH_UI.node(i, x, y)
   _push('setColor', COLOR.lerp(_IDLE_COLOR, _CLICKED_COLOR, glow))
   _push('translate', x, y)
   _push('scale', scale, scale)
-  _push('circle', 'fill', 0, 0, _RADIUS)
-  _push('setColor', 255, 255, 255)
-  _push('print', GRAPH_LOGIC.nodes()[i].pcs, -10, -13)
+  _push('polygon', 'fill', 0, -_RADIUS, _RADIUS, 0,
+                           0, _RADIUS, -_RADIUS, 0)
+  if near then
+    _push('setColor', 240, 240, 240)
+    _push('printf', GRAPH_LOGIC.nodes()[i].pcs, -_RADIUS, _RADIUS*1.5,
+                                                2*_RADIUS, 'center')
+  end
   _push('pop')
   return clicked
 end
@@ -78,8 +82,10 @@ function GRAPH_UI.edge(i, j, weight, midpoint)
   local n = (mx-px)^2 + (my-py)^2
   local near = p >= 0 and p <= 1 and n < _EDGE_CLICK_WIDTH^2
 
-  _push('setColor', 255, 255, 255, 255)
-  _push('print', weight, midpoint[1], midpoint[2])
+  if near then
+    _push('setColor', 240, 240, 240, 255)
+    _push('print', weight, midpoint[1], midpoint[2] + 10)
+  end
   if GRAPH_LOGIC.edges()[i][j].locked then
     _push('setColor', _LOCKED_EDGE_COLOR)
   else
@@ -106,7 +112,7 @@ function GRAPH_UI.draw()
   local g = love.graphics
   g.push()
   g.translate((-_camera):unpack())
-  g.setFont(Font)
+  FONT.set(18)
   for _,cmd in ipairs(_queue) do
     g[cmd[1]](unpack(cmd, 2))
   end
