@@ -15,11 +15,7 @@ local _ACTIONS = {
   'probe_cluster',
 }
 
-local MAP = {
-  {200, 300},
-  {500, 400},
-  {600, 100},
-}
+local MAP = GRAPH_LOGIC.map()
 
 local DIR = {
   'left', 'right', 'up', 'down',
@@ -55,8 +51,8 @@ end
 function ANTIVIRUS.load()
   _selected = 0
   ANTIVIRUS_HUD.load()
-	GRAPH_UI.load(3)
-  GRAPH_LOGIC.load(3)
+	GRAPH_UI.load(GRAPH_LOGIC.total())
+  GRAPH_LOGIC.load(GRAPH_LOGIC.total())
 end
 
 function ANTIVIRUS.update(dt)
@@ -92,7 +88,7 @@ function ANTIVIRUS.update(dt)
   end
 
   -- Draw nodes
-  for i=1,3 do
+  for i=1,GRAPH_LOGIC.total() do
     GRAPH_UI.node(i, MAP[i][1], MAP[i][2])
   end
 

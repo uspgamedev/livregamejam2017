@@ -11,6 +11,7 @@ local gamestates = {
 local state = gamestates.virus
 
 function love.load()
+  love.math.setRandomSeed(love.timer.getTime())
   BG.load()
   CURSOR.load()
   state.load()
