@@ -13,6 +13,7 @@ local _ACTIONS = {
 local _selected = 0
 
 function ANTIVIRUS.load()
+  _selected = 0
   ANTIVIRUS_HUD.load()
 	GRAPH_UI.load(3)
   GRAPH_LOGIC.load(3)
