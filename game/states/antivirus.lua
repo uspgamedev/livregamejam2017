@@ -11,7 +11,7 @@ local _ACTIONS = {
 }
 
 local MAP = {
-  {200, 300}, 
+  {200, 300},
   {500, 400},
   {600, 100},
 }
@@ -22,7 +22,7 @@ function ANTIVIRUS.load()
   _selected = 0
   ANTIVIRUS_HUD.load()
 	GRAPH_UI.load(3)
-  GRAPH_LOGIC.load(3)
+  GRAPH_LOGIC.load(7)
 end
 
 function ANTIVIRUS.update(dt)
