@@ -44,8 +44,13 @@ function GRAPH_UI.edge(i, j, state)
   local ix, iy = unpack(_nodes[i].pos)
   local jx, jy = unpack(_nodes[j].pos)
   local ex, ey = jx-ix, jy-iy
-  local rx, ry = mx-ix, my-iy
   local l = ex*ex + ey*ey
+  local sql = math.sqrt(l)
+  ix, iy = ix + ex*_RADIUS/sql, iy + ey*_RADIUS/sql
+  jx, jy = jx - ex*_RADIUS/sql, jy - ey*_RADIUS/sql
+  ex, ey = jx-ix, jy-iy
+  l = ex*ex + ey*ey
+  local rx, ry = mx-ix, my-iy
   local d = ex*rx + ey*ry
   local p = d/l
   local px, py = ix + p*ex, iy + p*ey
