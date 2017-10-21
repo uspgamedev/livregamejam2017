@@ -1,5 +1,6 @@
 
 local CURSOR = require 'view.cursor'
+local MOUSE = require 'view.helpers.mouse'
 local GRAPH_LOGIC = require 'graph_logic'
 local GRAPH_UI = require 'view.graph_ui'
 local ANTIVIRUS_HUD = require 'view.antivirus_hud'
@@ -67,6 +68,10 @@ function ANTIVIRUS.update(dt)
         GRAPH_UI.edge(i, j, GRAPH_LOGIC.edges()[i][j].weight, getMidpoint(i, j))
       end
     end
+  end
+
+  if MOUSE.clicked(2) then
+    _selected = 0
   end
 
   local action = _ACTIONS[_selected]
