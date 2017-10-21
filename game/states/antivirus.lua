@@ -4,6 +4,14 @@ local GRAPH_UI = require 'view.graph_ui'
 local ANTIVIRUS_HUD = require 'view.antivirus_hud'
 local ANTIVIRUS = {}
 
+local _ACTIONS = {
+  'move_intel',
+  'move_intel',
+  'move_intel',
+}
+
+local _selected = 0
+
 function ANTIVIRUS.load()
   ANTIVIRUS_HUD.load()
 	GRAPH_UI.load(3)
@@ -13,11 +21,12 @@ end
 function ANTIVIRUS.update(dt)
   ANTIVIRUS_HUD.update(dt)
   print(GRAPH_LOGIC.nodes()[1].infectedPcs)
-  if ANTIVIRUS_HUD.action('move_intel') then
-    print("move intel!")
+  for i,action in ipairs(_ACTIONS) do
+    if ANTIVIRUS_HUD.action(action, i == _selected) then
+      _selected = i
+      print("action", i, action)
+    end
   end
-  ANTIVIRUS_HUD.action('move_intel')
-  ANTIVIRUS_HUD.action('move_intel')
   GRAPH_UI.update(dt)
   if GRAPH_UI.node(1, 200, 300) then
     print("node 1")
