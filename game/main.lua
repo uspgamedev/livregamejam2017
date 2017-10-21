@@ -1,5 +1,6 @@
 
 local MOUSE = require 'view.helpers.mouse'
+local BG = require 'view.background'
 
 local gamestates = {
   virus = require 'states.virus',
@@ -9,6 +10,7 @@ local gamestates = {
 local state = gamestates.virus
 
 function love.load()
+  BG.load()
   state.load()
 end
 
@@ -23,6 +25,7 @@ local function newState(state)
 end
 
 function love.update(dt)
+  BG.update(dt)
   MOUSE.update(dt)
   state.update(dt)
 end
@@ -38,5 +41,6 @@ function love.keypressed(key)
 end
 
 function love.draw()
+  BG.draw()
   state.draw()
 end
