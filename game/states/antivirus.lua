@@ -1,4 +1,6 @@
 
+local CURSOR = require 'view.cursor'
+local MOUSE = require 'view.helpers.mouse'
 local GRAPH_LOGIC = require 'graph_logic'
 local GRAPH_UI = require 'view.graph_ui'
 local ANTIVIRUS_HUD = require 'view.antivirus_hud'
@@ -22,9 +24,16 @@ local _selected = 0
 local _turn_cooldown = 0
 
 local function getMidpoint(a, b)
-  x = (MAP[a][1] + MAP[b][1])/2
-  y = (MAP[a][2] + MAP[b][2])/2
+  k = -8
 
+  dX = (MAP[b][1]-MAP[a][1])
+  dY = (MAP[b][2]-MAP[a][2])
+  norm = 1/math.sqrt(dX*dX + dY*dY)
+  xMid = (MAP[a][1] + MAP[b][1])/2
+  yMid = (MAP[a][2] + MAP[b][2])/2
+  x = (dY*norm)*k + xMid
+  y = (-dX*norm)*k + yMid
+  
   return {x, y}
 end
 
@@ -36,17 +45,18 @@ function ANTIVIRUS.load()
 end
 
 function ANTIVIRUS.update(dt)
+  -- Calculate turn time
   _turn_cooldown = _turn_cooldown + dt
   while _turn_cooldown >= _TURN_TIME do
     GRAPH_LOGIC.turn()
     _turn_cooldown = _turn_cooldown - _TURN_TIME
   end
 
+  -- Draw HUD
   ANTIVIRUS_HUD.update(dt)
   for i,action in ipairs(_ACTIONS) do
     if ANTIVIRUS_HUD.action(action, i == _selected) then
-      _selected = i
-      print("action", i, action)
+      _selected = _selected == i and 0 or i
     end
   end
   ANTIVIRUS_HUD.turnClock(_turn_cooldown/_TURN_TIME)
@@ -65,6 +75,17 @@ function ANTIVIRUS.update(dt)
         GRAPH_UI.edge(i, j, GRAPH_LOGIC.edges()[i][j].weight, getMidpoint(i, j))
       end
     end
+  end
+
+  if MOUSE.clicked(2) then
+    _selected = 0
+  end
+
+  local action = _ACTIONS[_selected]
+  if action then
+    CURSOR.crosshairs()
+  else
+    CURSOR.pointer()
   end
 
 end

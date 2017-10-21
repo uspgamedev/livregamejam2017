@@ -33,7 +33,7 @@ end
 function GRAPH_UI.node(i, x, y)
   local mx, my = MOUSE.pos()
   local near = (mx - x)^2 + (my - y)^2 < (_RADIUS*_HOVER_SIZE)^2
-  local clicked = MOUSE.clicked() and near
+  local clicked = MOUSE.clicked(1) and near
   local glow = clicked and 1 or _nodes[i].glow
   local scale = near and _HOVER_SIZE or 1
   _nodes[i].glow = glow
@@ -75,7 +75,7 @@ function GRAPH_UI.edge(i, j, weight, midpoint)
   _push('line', ix, iy, jx, jy)
 
 
-  return near and MOUSE.clicked()
+  return near and MOUSE.clicked(1)
 end
 
 function GRAPH_UI.update(dt)
