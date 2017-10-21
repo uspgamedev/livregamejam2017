@@ -2,9 +2,9 @@
 local GRAPH_LOGIC = {}
 
 local _initialNode = 1 -- Test only variable
-local _testEdges = {{0, 5, 0},
+local _testEdges = {{0, 5, 5},
                     {5, 0, 8},
-                    {0, 8, 0}} -- Test only variable to simulate a file input
+                    {5, 8, 0}} -- Test only variable to simulate a file input
 
 --[[local _testEdges = {{0, 5, 3, 7, 11, 0, 0},
                     {5, 0, 0, 0, 0, 0, 0},
@@ -13,7 +13,7 @@ local _testEdges = {{0, 5, 0},
                     {11, 0, 0, 0, 0, 2, 5},
                     {0, 0, 0, 0, 2, 0, 0},
                     {0, 0, 0, 0, 5, 0, 0}}]] -- Test only variable to simulate a file input
-local _power = 10
+local _power = 3
 local _lastInfected = false
 local _nodes = {}
 local _edges = {}
@@ -43,12 +43,15 @@ function GRAPH_LOGIC.load(n)
   end
 end
 
-local function compare(a, b)
+local function compareD(a, b)
   return _nodes[a.fin].pcs > _nodes[b.fin].pcs
 end
 
-function bfsWeight(neighs)
-  print('BFS')
+local function compareA(a, b)
+  return _nodes[a.fin].pcs < _nodes[b.fin].pcs
+end
+
+function breadth(neighs)
   local finish = false
   local counter = _power
   local notFullNodes = #neighs
@@ -77,8 +80,11 @@ function bfsWeight(neighs)
   end
 end
 
-function dGreedyWeight(neighs)
-  print('Depth greedy')
+function depth(neighs)
+  print("Not implemented yet D:")
+end
+
+function focusDepth(neighs)
   local finish = false
   local counter = _power
   local i = 1
@@ -96,7 +102,11 @@ function dGreedyWeight(neighs)
   end
 end
 
-function GRAPH_LOGIC.turn()
+function focusBreadth(neighs)
+  print('Not implemented yet D:')
+end
+
+function moveVirus(type, neighNodes)
   local neighNodes = {}
   for i=1,#_nodes do
     for j=i+1,#_nodes do
@@ -109,14 +119,39 @@ function GRAPH_LOGIC.turn()
       end
     end
   end
-  table.sort(neighNodes, compare)
   for i,edge in ipairs(neighNodes) do
-    print(i, edge.ini, ',', edge.fin, edge.passing)
+    print(i, tostring(edge.ini)..','..tostring(edge.fin), edge.passing)
   end
-  dGreedyWeight(neighNodes)
+  if type == 0 then
+    print('BFS')
+    breadth(neighNodes)
+  elseif type == 1 then
+    print('DFS')
+    depth(neighNodes)
+  elseif type == 2 then
+    print('Depth greedy')
+    table.sort(neighNodes, compareD)
+    focusDepth(neighNodes)
+  elseif type == 3 then
+    print('Depth humble')
+    table.sort(neighNodes, compareA)
+    focusDepth(neighNodes)
+  elseif type == 4 then
+    print('Beadth greedy')
+    table.sort(neighNodes, compareD)
+    focusBreadth(neighNodes)
+  elseif type == 5 then
+    print('Beadth humble')
+    table.sort(neighNodes, compareA)
+    focusBreadth(neighNodes)
+  end
   for i,node in ipairs(_nodes) do
-    print(i, node.infectedPcs, "/", node.pcs, node.infected)
+    print(i, tostring(node.infectedPcs).."/"..tostring(node.pcs), node.infected)
   end
+end
+
+function GRAPH_LOGIC.turn()
+  moveVirus(3, neighNodes)
 end
 
 function GRAPH_LOGIC.nodes()
