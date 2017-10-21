@@ -10,8 +10,13 @@ local gamestates = {
 
 local state = gamestates.virus
 
+local _bgm
+
 function love.load()
-  love.math.setRandomSeed(love.timer.getTime())
+  _bgm = love.audio.newSource("assets/bgm/tyops_futuristic-suspense-synth.ogg")
+  _bgm:setVolume(0.1)
+  _bgm:setLooping(true)
+  _bgm:play()
   BG.load()
   CURSOR.load()
   state.load()
