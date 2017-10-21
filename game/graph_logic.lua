@@ -18,18 +18,32 @@ local _lastInfected = false
 local _nodes = {}
 local _edges = {}
 
+function newNode(capacity)
+  return {
+    pcs = capacity,
+    infectedPcs = 0,
+    infected = false,
+    resetIn = 5
+  }
+end
+
+function newEdge(w)
+  return (w ~= 0) and { weight = w } or false
+end
+
 function GRAPH_LOGIC.load(n)
   _nodes = {}
   _edges = {}
   for i=1,n do
-    _nodes[i] = { pcs = 10*i, infectedPcs = 0, infected = false }
+    _nodes[i] = newNode(10*i)
   end
-  _nodes[_initialNode] = { pcs = 10, infectedPcs = 10, infected = true }
+  _nodes[_initialNode].infectedPcs = 10
+  _nodes[_initialNode].infected = true
   for i=1,n do
     _edges[i] = {}
     -- Add file infos to edges
     for j=1,n do
-      _edges[i][j] = (_testEdges[i][j] ~= 0) and ((j < i) and _edges[j][i] or { weight = _testEdges[i][j] }) or false
+      _edges[i][j] = (j < i) and _edges[j][i] or newEdge(_testEdges[i][j])
     end
   end
   for i,line in ipairs(_edges) do
