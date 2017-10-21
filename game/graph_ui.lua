@@ -3,7 +3,6 @@ local COLOR = require 'cpml.color'
 local GRAPH_UI = {}
 
 local _RADIUS = 16
-local _REACH = 20
 local _IDLE_COLOR = COLOR(0, 0, 255, 255)
 local _HOVER_SIZE = 1.2
 local _CLICKED_COLOR = COLOR(0, 255, 255, 255)
@@ -33,7 +32,7 @@ end
 
 function GRAPH_UI.node(i, x, y)
   local mx, my = unpack(_mouse_pos)
-  local near = (mx - x)^2 + (my - y)^2 < _REACH^2
+  local near = (mx - x)^2 + (my - y)^2 < (_RADIUS*_HOVER_SIZE)^2
   local clicked = _mouse_clicked and near
   local glow = clicked and 1 or _nodes[i].glow
   local scale = near and _HOVER_SIZE or 1
@@ -55,8 +54,9 @@ function GRAPH_UI.edge(i, j, state)
   local ex, ey = jx-ix, jy-iy
   local l = ex*ex + ey*ey
   local sql = math.sqrt(l)
-  ix, iy = ix + ex*_REACH/sql, iy + ey*_REACH/sql
-  jx, jy = jx - ex*_REACH/sql, jy - ey*_REACH/sql
+  local offset = 2*_RADIUS
+  ix, iy = ix + ex*offset/sql, iy + ey*offset/sql
+  jx, jy = jx - ex*offset/sql, jy - ey*offset/sql
   ex, ey = jx-ix, jy-iy
   l = ex*ex + ey*ey
   local rx, ry = mx-ix, my-iy
