@@ -68,7 +68,6 @@ function GRAPH_UI.edge(i, j, weight, midpoint)
   local n = (mx-px)^2 + (my-py)^2
   local near = p >= 0 and p <= 1 and n < _EDGE_CLICK_WIDTH^2
 
-  print(weight)
   _push('setColor', 255, 255, 255, 255)
   _push('print', weight, midpoint[1], midpoint[2])
   _push('setColor', _EDGE_COLOR)
@@ -95,4 +94,3 @@ function GRAPH_UI.draw()
 end
 
 return GRAPH_UI
-

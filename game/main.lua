@@ -36,9 +36,10 @@ function love.keypressed(key)
   if key == 'space' then
     state = newState(state)
     state.load()
-  end
-  if key == 'l' then
+  elseif key == 'l' then
     state.iterateVirus()
+  elseif key == 'escape' then
+    love.event.quit()
   end
 end
 
