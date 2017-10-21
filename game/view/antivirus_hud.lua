@@ -4,11 +4,6 @@ local ANTIVIRUS_HUD = {}
 
 local _RADIUS = 32
 
-local _icons = {}
-local _actions = {}
-
-local _glow_phase = 0
-
 local _GLOW_CODE = [[
 extern number phase;
 vec4 effect(vec4 color, Image texture, vec2 tex_coords, vec2 screen_coords) {
@@ -18,6 +13,12 @@ vec4 effect(vec4 color, Image texture, vec2 tex_coords, vec2 screen_coords) {
 ]]
 
 local _GLOW_SHADER
+
+local _icons = {}
+local _actions = {}
+local _turn_progress = 0
+
+local _glow_phase = 0
 
 local function _loadIcon(name)
   local icon = _icons[name] if not icon then
@@ -57,8 +58,13 @@ function ANTIVIRUS_HUD.action(action_name, selected)
   return near and clicked
 end
 
+function ANTIVIRUS_HUD.turnClock(progress)
+  _turn_progress = progress
+end
+
 function ANTIVIRUS_HUD.draw()
   local g = love.graphics
+  local w, h = g.getDimensions()
   local i = 0
   for _,action in ipairs(_actions) do
     g.push()
@@ -73,6 +79,8 @@ function ANTIVIRUS_HUD.draw()
     i = i + 1
     g.setShader()
   end
+  g.setColor(200, 200, 50, 255)
+  g.rectangle('fill', 32, h - 32, _turn_progress*(w - 64), 4)
 end
 
 return ANTIVIRUS_HUD

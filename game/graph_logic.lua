@@ -2,8 +2,10 @@
 local GRAPH_LOGIC = {}
 
 local _initialNode = 1 -- Test only variable
-local _testEdges = {{0, 5, 0}, {5, 0, 8}, {0, 8, 0}} -- Test only variable to simulate a file input
-local _power = 30
+local _testEdges = {{0, 5, 0},
+                    {5, 0, 8},
+                    {0, 8, 0}} -- Test only variable to simulate a file input
+local _power = 10
 local _lastInfected = false
 local _nodes = {}
 local _edges = {}
@@ -38,6 +40,7 @@ local function compare(a, b)
 end
 
 function bfsWeight(neighs)
+  print('BFS')
   local finish = false
   local counter = _power
   local notFullNodes = #neighs
@@ -52,8 +55,12 @@ function bfsWeight(neighs)
         fin.infectedPcs = fin.infectedPcs + add
         neighs[i].passing = neighs[i].passing - add
         counter = counter - add
+        print(fin.infectedPcs, fin.pcs)
         if fin.infectedPcs == fin.pcs then
           fin.infected = true
+          notFullNodes = notFullNodes - 1
+        end
+        if neighs[i].passing == 0 then
           notFullNodes = notFullNodes - 1
         end
         finish = false

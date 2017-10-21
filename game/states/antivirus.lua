@@ -4,6 +4,8 @@ local GRAPH_UI = require 'view.graph_ui'
 local ANTIVIRUS_HUD = require 'view.antivirus_hud'
 local ANTIVIRUS = {}
 
+local _TURN_TIME = 12
+
 local _ACTIONS = {
   'move_intel',
   'lock_route',
@@ -17,6 +19,7 @@ local MAP = {
 }
 
 local _selected = 0
+local _turn_cooldown = 0
 
 local function getMidpoint(a, b)
   x = (MAP[a][1] + MAP[b][1])/2
@@ -33,6 +36,12 @@ function ANTIVIRUS.load()
 end
 
 function ANTIVIRUS.update(dt)
+  _turn_cooldown = _turn_cooldown + dt
+  while _turn_cooldown >= _TURN_TIME do
+    GRAPH_LOGIC.turn()
+    _turn_cooldown = _turn_cooldown - _TURN_TIME
+  end
+
   ANTIVIRUS_HUD.update(dt)
   for i,action in ipairs(_ACTIONS) do
     if ANTIVIRUS_HUD.action(action, i == _selected) then
@@ -40,6 +49,8 @@ function ANTIVIRUS.update(dt)
       print("action", i, action)
     end
   end
+  ANTIVIRUS_HUD.turnClock(_turn_cooldown/_TURN_TIME)
+
   GRAPH_UI.update(dt)
 
   -- Draw nodes
@@ -63,4 +74,9 @@ function ANTIVIRUS.draw()
   ANTIVIRUS_HUD.draw()
 end
 
+function ANTIVIRUS.iterateVirus()
+  GRAPH_LOGIC.turn()
+end
+
 return ANTIVIRUS
+
