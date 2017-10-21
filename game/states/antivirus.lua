@@ -1,7 +1,7 @@
 
-local GRAPH_UI = require 'graph_ui'
 local GRAPH_LOGIC = require 'graph_logic'
-local ANTIVIRUS_HUD = require 'antivirus_hud'
+local GRAPH_UI = require 'view.graph_ui'
+local ANTIVIRUS_HUD = require 'view.antivirus_hud'
 local ANTIVIRUS = {}
 
 function ANTIVIRUS.load()
