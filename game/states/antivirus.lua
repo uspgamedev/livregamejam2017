@@ -22,9 +22,16 @@ local _selected = 0
 local _turn_cooldown = 0
 
 local function getMidpoint(a, b)
-  x = (MAP[a][1] + MAP[b][1])/2
-  y = (MAP[a][2] + MAP[b][2])/2
+  k = -8
 
+  dX = (MAP[b][1]-MAP[a][1])
+  dY = (MAP[b][2]-MAP[a][2])
+  norm = 1/math.sqrt(dX*dX + dY*dY)
+  xMid = (MAP[a][1] + MAP[b][1])/2
+  yMid = (MAP[a][2] + MAP[b][2])/2
+  x = (dY*norm)*k + xMid
+  y = (-dX*norm)*k + yMid
+  
   return {x, y}
 end
 
