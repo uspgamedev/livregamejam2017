@@ -1,3 +1,4 @@
+
 local GRAPH_LOGIC = {}
 local MAP_LOADER = require 'map_loader'
 
@@ -8,7 +9,7 @@ local _resetInCons = 10 -- Change this at antivirus.lua too, when drawing edges
 
 local _testEdges -- Test only variable to simulate a file input
 
-local _power = 4
+local _power = 5
 local _nodes = {}
 local _edges = {}
 
@@ -248,7 +249,7 @@ function moveVirus(type, neighNodes)
 end
 
 function GRAPH_LOGIC.turn()
-  moveVirus(3, neighNodes) -- Set the type of the move here
+  moveVirus(4, neighNodes) -- Set the type of the move here
 end
 
 function GRAPH_LOGIC.nodes()

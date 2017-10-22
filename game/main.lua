@@ -1,3 +1,4 @@
+
 local MAP_LOADER = require 'map_loader'
 local MOUSE = require 'view.helpers.mouse'
 local CURSOR = require 'view.cursor'
@@ -12,7 +13,10 @@ local state = gamestates.virus
 
 local _bgm
 
-function love.load()
+function love.load(arg)
+  if arg[2] then
+    DEBUG = true
+  end
   _bgm = love.audio.newSource("assets/bgm/tyops_futuristic-suspense-synth.ogg")
   _bgm:setVolume(0.1)
   _bgm:setLooping(true)

@@ -74,7 +74,7 @@ function GRAPH_UI.node(i, x, y)
                                                 2*_RADIUS, 'center')
   end
 
-  if node.hasProbe then
+  if node.hasProbe or DEBUG then
     local percent = ("%d%%"):format(100 * node.infectedPcs / node.pcs)
     _push('setColor', 200, 140, 140)
     _push('printf', percent, _RADIUS, _RADIUS*1.5,
