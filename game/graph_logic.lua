@@ -47,7 +47,7 @@ function GRAPH_LOGIC.load(n)
   for i=1,n do
 	_nodes[i] = newNode(map['capacity'][i])
   end
-  _nodes[_initialNode].infectedPcs = 10
+  _nodes[_initialNode].infectedPcs = _nodes[_initialNode].pcs
   _nodes[_initialNode].infected = true
   _nodes[_initialNode].resetIn = _resetInCons
   for i=1,n do

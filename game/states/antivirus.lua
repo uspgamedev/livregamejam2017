@@ -33,7 +33,7 @@ local DIR = {
 local _selected = 0
 local _turn_cooldown = 0
 local _played = false
-local _intelNode = 1
+local _intelNode = 2
 local _probeTime = 5
 
 local function getMidpoint(a, b)
