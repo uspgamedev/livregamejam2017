@@ -38,7 +38,7 @@ function love.load(arg)
     DEBUG = true
   end
   _bgm = love.audio.newSource("assets/bgm/tyops_futuristic-suspense-synth.ogg")
-  _bgm:setVolume(0.1)
+  _bgm:setVolume(0.3)
   _bgm:setLooping(true)
   _bgm:play()
   MAP_LOADER.loadMaps()
