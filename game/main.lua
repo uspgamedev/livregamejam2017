@@ -1,4 +1,4 @@
-
+local MAP_LOADER = require 'map_loader'
 local MOUSE = require 'view.helpers.mouse'
 local CURSOR = require 'view.cursor'
 local BG = require 'view.background'
@@ -17,6 +17,7 @@ function love.load()
   _bgm:setVolume(0.1)
   _bgm:setLooping(true)
   _bgm:play()
+  MAP_LOADER.loadMaps()
   BG.load()
   CURSOR.load()
   state.load()
