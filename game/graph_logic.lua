@@ -24,7 +24,7 @@ local _lastInfected = false
 local _nodes = {}
 local _edges = {}
 
-function newNode(capacity)
+local function newNode(capacity)
   return {
     pcs = capacity,
     infectedPcs = 0,
@@ -34,7 +34,7 @@ function newNode(capacity)
   }
 end
 
-function newEdge(w)
+local function newEdge(w)
   return (w ~= 0) and { weight = w, locked = false, resetIn = 0 } or false
 end
 
