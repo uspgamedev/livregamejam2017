@@ -16,6 +16,10 @@ local _edges = {}
 local _strategy
 local _next_strat = 1
 
+local _sleeping = false
+local _sleepResetIn = 0
+local _SLEEP_MAX = 3
+
 local function newNode(capacity)
   return {
     pcs = capacity,
@@ -230,6 +234,12 @@ function moveVirus(type, neighNodes)
       end
     end
   end
+  if _sleeping then
+    _sleepResetIn = _sleepResetIn - 1
+    if _sleepResetIn == 0 then
+      _sleeping = false
+    end
+  end
   for i,edge in ipairs(neighNodes) do
 	  print(i, tostring(edge.ini)..','..tostring(edge.fin), edge.passing)
   end
@@ -258,6 +268,10 @@ function moveVirus(type, neighNodes)
   	print('Beadth humble')
   	table.sort(neighNodes, compareA)
   	focusBreadth(neighNodes)
+  elseif type == 6 then
+    print('Sleep')
+    _sleeping = true
+    _sleepResetIn = _SLEEP_MAX
   end
   for i,node in ipairs(_nodes) do
     if DEBUG then
@@ -293,6 +307,10 @@ end
 
 function GRAPH_LOGIC.connected(i, j)
   return not not _edges[i][j]
+end
+
+function GRAPH_LOGIC.sleeping()
+  return _sleeping
 end
 
 return GRAPH_LOGIC
