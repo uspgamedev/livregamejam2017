@@ -57,13 +57,23 @@ function GRAPH_UI.node(i, x, y)
     _push('setColor', COLOR.lerp(_IDLE_COLOR, _CLICKED_COLOR, glow))
   end
   _push('translate', x, y)
+  _push('push')
   _push('scale', scale, scale)
   _push('polygon', 'fill', 0, -_RADIUS, _RADIUS, 0,
                            0, _RADIUS, -_RADIUS, 0)
+  _push('pop')
   if near then
     _push('setColor', 240, 240, 240)
     _push('printf', GRAPH_LOGIC.nodes()[i].pcs, -_RADIUS, _RADIUS*1.5,
                                                 2*_RADIUS, 'center')
+  end
+
+  local node = GRAPH_LOGIC.nodes()[i]
+  if node.hasProbe then
+    local percent = ("%d%%"):format(100 * node.infectedPcs / node.pcs)
+    _push('setColor', 200, 140, 140)
+    _push('printf', percent, _RADIUS, _RADIUS*1.5,
+                             3*_RADIUS, 'left')
   end
   _push('pop')
   return clicked
