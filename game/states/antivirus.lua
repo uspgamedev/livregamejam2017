@@ -146,7 +146,7 @@ function ANTIVIRUS.draw()
 end
 
 function ANTIVIRUS.iterateVirus()
-  GRAPH_LOGIC.turn()
+  _turn_cooldown = _TURN_TIME
 end
 
 return ANTIVIRUS

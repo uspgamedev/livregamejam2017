@@ -3,6 +3,25 @@ local _maps = {}
 local _used_maps = {}
 local _current_map
 
+local function generateEdgesMatrix(edges)
+	local matrix = {}
+
+	for i=1, #edges do
+		table.insert(matrix, {})
+		for j=1, #edges do
+			table.insert(matrix[i], 0)
+		end
+	end
+
+	for i=1, #edges do
+		for j=1, #edges[i] do
+			matrix[i][edges[i][j][1]] = edges[i][j][2]
+		end
+	end
+
+	return matrix
+end
+
 --Returns true if a map was used or false otherwise
 local function mapUsed(map)
 	local i = 1
@@ -51,7 +70,7 @@ function MAP_LOADER.getCapacity()
 end
 
 function MAP_LOADER.getEdges()
-	return _current_map['edges']
+	return generateEdgesMatrix(_current_map['edges'])
 end
 
 function MAP_LOADER.getTotal()
