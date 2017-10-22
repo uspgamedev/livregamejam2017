@@ -8,7 +8,7 @@ local _options
 
 function VIRUS.load()
   _max_strategies = 5
-  _strategies = {}
+  _strategies = {'asd'}
   _options = {
     'BFS', 'RANDOM'
   }
