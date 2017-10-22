@@ -2,6 +2,7 @@
 local VEC2  = require 'cpml.vec2'
 local FONT  = require 'view.helpers.font'
 local MOUSE = require 'view.helpers.mouse'
+local ICON  = require 'view.helpers.icon'
 local VIRUS_MENU = {}
 
 local _SLOT_HOOK = VEC2(200, 200)
@@ -109,12 +110,17 @@ function VIRUS_MENU.draw()
     g.push()
     g.translate(_OPTION_HOOK:unpack())
     local l,r,t,b = _optionBounds(i)
+    g.setColor(255, 2550, 255, 255)
     if option.hover then
       g.setColor(200, 240, 200, 255)
     else
       g.setColor(100, 240, 100, 255)
     end
     g.rectangle('fill', l, t, r-l, b-t)
+    g.setColor(80, 20, 20, 255)
+    g.draw(ICON.load(option.name), (l+r)/2, (t+b)/2, 0,
+                                   1/4, 1/4,
+                                   256, 256)
     g.pop()
   end
   local l,r,t,b = _confirmBounds()
@@ -124,6 +130,10 @@ function VIRUS_MENU.draw()
     g.setColor(100, 240, 100, 255)
   end
   g.rectangle('fill', l, t, r-l, b-t)
+  FONT.set(24)
+  local pad = (_SLOT_SIZE.y - FONT.height(24))/2
+  g.setColor(80, 20, 20, 255)
+  g.printf("compile", l, t+pad, r - l, 'center')
 end
 
 return VIRUS_MENU

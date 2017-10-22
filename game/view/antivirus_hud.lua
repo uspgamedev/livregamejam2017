@@ -1,7 +1,8 @@
 
 local COLOR = require 'cpml.color'
 local MOUSE = require 'view.helpers.mouse'
-local FONT = require 'view.helpers.font'
+local ICON  = require 'view.helpers.icon'
+local FONT  = require 'view.helpers.font'
 local GRAPH_LOGIC = require 'graph_logic'
 local ANTIVIRUS_HUD = {}
 
@@ -18,19 +19,10 @@ vec4 effect(vec4 color, Image texture, vec2 tex_coords, vec2 screen_coords) {
 
 local _GLOW_SHADER
 
-local _icons = {}
 local _actions = {}
 local _turn_progress = 0
 
 local _glow_phase = 0
-
-local function _loadIcon(name)
-  local icon = _icons[name] if not icon then
-    icon = love.graphics.newImage(("assets/icons/%s.png"):format(name))
-    _icons[name] = icon
-  end
-  return icon
-end
 
 local function _iconPos(i)
   return 64 + (i%2)*64, 64 + 40*i
@@ -81,7 +73,7 @@ function ANTIVIRUS_HUD.draw()
     if action.selected then
       g.setShader(_GLOW_SHADER)
     end
-    g.draw(_loadIcon(action.name), 0, 0, 0, 1, 1, 256, 256)
+    g.draw(ICON.load(action.name), 0, 0, 0, 1, 1, 256, 256)
     g.pop()
     i = i + 1
     g.setShader()
