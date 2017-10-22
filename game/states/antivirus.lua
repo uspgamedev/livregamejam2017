@@ -18,7 +18,7 @@ local _ACTIONS = {
 local map
 
 local DIR = {
-  'left', 'right', 'sup', 'down',
+  'left', 'right', 'up', 'down',
   'a', 'd', 'w', 's',
   left = VEC2(-1,0),
   a = VEC2(-1,0),
@@ -132,7 +132,7 @@ function ANTIVIRUS.update(dt)
 
   for _,dir in ipairs(DIR) do
     if love.keyboard.isDown(dir) then
-      GRAPH_UI.moveCamera((DIR[dir]*(dt*200)):unpack())
+      GRAPH_UI.moveCamera((DIR[dir]*(dt*400)):unpack())
     end
   end
 
