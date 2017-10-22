@@ -132,7 +132,7 @@ function ANTIVIRUS.update(dt)
 
   for _,dir in ipairs(DIR) do
     if love.keyboard.isDown(dir) then
-      GRAPH_UI.moveCamera((DIR[dir]*(dt*200)):unpack())
+      GRAPH_UI.moveCamera((DIR[dir]*(dt*400)):unpack())
     end
   end
 
