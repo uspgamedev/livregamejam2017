@@ -29,7 +29,7 @@ function VIRUS.update(dt)
     end
   end
   if VIRUS_MENU.confirm() then
-    newState(_strategies)
+    newState(false, _strategies)
   end
 end
 
