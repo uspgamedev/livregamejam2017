@@ -53,10 +53,10 @@ end
 function ANTIVIRUS.load(virus_strategies)
   _selected = 0
   ANTIVIRUS_HUD.load()
-	GRAPH_UI.load(MAP_LOADER.getTotal())
   GRAPH_LOGIC.load(MAP_LOADER.getTotal())
   GRAPH_LOGIC.setStrategy(virus_strategies)
   map = MAP_LOADER.getCurrMap()
+	GRAPH_UI.load(MAP_LOADER.getTotal(), map)
   _intelNode = MAP_LOADER.getIntel()
 end
 
