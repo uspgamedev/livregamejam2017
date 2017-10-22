@@ -56,13 +56,13 @@ function GRAPH_LOGIC.load(n)
 		end
   end
   for i,line in ipairs(_edges) do
-	for j,edge in ipairs(_edges[i]) do
-	  if not edge then
-		print(i, j, "false")
-	  else
-		print(i, j, edge.weight)
-	  end
-	end
+    for j,edge in ipairs(_edges[i]) do
+      if not edge then
+        print(i, j, "false")
+      else
+        print(i, j, edge.weight)
+      end
+    end
   end
 end
 
@@ -251,6 +251,10 @@ end
 
 function GRAPH_LOGIC.edges()
   return _edges
+end
+
+function GRAPH_LOGIC.connected(i, j)
+  return not not _edges[i][j]
 end
 
 function GRAPH_LOGIC.total()
