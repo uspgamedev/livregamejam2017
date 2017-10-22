@@ -36,6 +36,7 @@ local DIR = {
 
 local _selected = 0
 local _turn_cooldown = 0
+local _played = false
 
 local function getMidpoint(a, b)
   k = -8
@@ -64,6 +65,7 @@ function ANTIVIRUS.update(dt)
   while _turn_cooldown >= _TURN_TIME do
     GRAPH_LOGIC.turn()
     _turn_cooldown = _turn_cooldown - _TURN_TIME
+    _played = false
   end
 
   -- Draw HUD
@@ -99,10 +101,12 @@ function ANTIVIRUS.update(dt)
     for j=i+1,#GRAPH_LOGIC.nodes() do
       if GRAPH_LOGIC.edges()[i][j] and
          GRAPH_UI.edge(i, j, GRAPH_LOGIC.edges()[i][j].weight, getMidpoint(i, j)) then
+        -- Add _selected = 0 and _turn_cooldown = _TURN_TIME in every action
         if action == 'lock_route' then
           GRAPH_LOGIC.edges()[i][j].locked = true
           GRAPH_LOGIC.edges()[i][j].resetIn = 5
           _selected = 0
+          _turn_cooldown = _TURN_TIME
         end
       end
     end

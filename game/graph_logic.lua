@@ -100,7 +100,7 @@ function random(neighs)
   local finish = false
   local pcounter = _power
   local ncounter = 0
-  local r = math.random(#neighs)
+  local r = love.math.random(#neighs)
   local fin = _nodes[neighs[r].fin]
   while pcounter ~= 0 and ncounter ~= #neighs do
     if not fin.infected then
@@ -112,7 +112,7 @@ function random(neighs)
         fin.infected = true
       end
     end
-    fin = _nodes[neighs[math.random(#neighs)].fin]
+    fin = _nodes[neighs[love.math.random(#neighs)].fin]
     ncounter = ncounter + 1
   end
 end

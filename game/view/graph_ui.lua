@@ -94,7 +94,6 @@ function GRAPH_UI.edge(i, j, weight, midpoint)
   _push('setLineWidth', near and 4 or 1)
   _push('line', ix, iy, jx, jy)
 
-
   return near and MOUSE.clicked(1)
 end
 
