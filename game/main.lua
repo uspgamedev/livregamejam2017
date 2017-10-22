@@ -6,17 +6,19 @@ local BG = require 'view.background'
 local who_won
 
 gamestates = {
-  virus = require 'states.virus',
-  antivirus = require 'states.antivirus',
-  inter_round = require 'states.inter_round'
+  require 'states.virus',
+  require 'states.wait',
+  require 'states.antivirus',
+  require 'states.inter_round'
 }
+local counter = 1
 
-local _state = gamestates.virus
+local _state = gamestates[1]
 
 local _bgm
 
 function setWhoWon(winner)
-  who_won = winner 
+  who_won = winner
 end
 
 function getWhoWon()
@@ -24,15 +26,9 @@ function getWhoWon()
 end
 
 function newState(round_end, ...)
-  if round_end == 1 then
-    _state = gamestates.inter_round
-  elseif _state == gamestates.virus then
-    _state = gamestates.antivirus
-    _state.load(...)
-  else
-    _state = gamestates.virus
-    _state.load(...)
-  end
+  counter = counter%#gamestates + 1
+  _state = gamestates[counter]
+  _state.load(...)
 
   return _state
 end

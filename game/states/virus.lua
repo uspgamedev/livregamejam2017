@@ -29,7 +29,7 @@ function VIRUS.update(dt)
     end
   end
   if VIRUS_MENU.confirm() then
-    newState(false, _strategies)
+    newState(2, _strategies)
   end
 end
 
@@ -38,4 +38,3 @@ function  VIRUS.draw()
 end
 
 return VIRUS
-

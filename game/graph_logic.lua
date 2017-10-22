@@ -118,8 +118,7 @@ function distributeEqually(neighs, counter)
       fin.infected = true
       fin.resetIn = _resetInCons
       neighs[i] = nil
-    end
-    if neighs[i].passing == 0 then
+    elseif neighs[i].passing == 0 then
       neighs[i] = nil
     end
   end

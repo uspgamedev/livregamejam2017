@@ -1,4 +1,4 @@
-local ROUND_END = require 'view.round_end'
+local TEXT_SCREEN = require 'view.text_screen'
 local MOUSE = require 'view.helpers.mouse'
 local ANTIVIRUS = require 'states.antivirus'
 local MAP_LOADER = require 'map_loader'
@@ -6,12 +6,11 @@ local MAP_LOADER = require 'map_loader'
 local INTER_ROUND = {}
 
 function INTER_ROUND.load()
-	ROUND_END.load()
+	TEXT_SCREEN.load()
 end
 
 function INTER_ROUND.update(dt)
 	ANTIVIRUS.update(dt)
-	ROUND_END.update(dt)
 
 	if MOUSE.clicked(1) then
 		MAP_LOADER.switchMap()
@@ -19,8 +18,8 @@ function INTER_ROUND.update(dt)
 	end
 end
 
-function  INTER_ROUND.draw()
-	ROUND_END.draw(getWhoWon())
+function INTER_ROUND.draw()
+	TEXT_SCREEN.draw("Round won\n\n" .. "    " .. getWhoWon() .. " wins")
 end
 
 function INTER_ROUND.keypressed(key)
