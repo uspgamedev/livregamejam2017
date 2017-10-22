@@ -83,37 +83,54 @@ local function compareM(a, b)
   local node1 = _nodes[a.fin]
   local node2 = _nodes[b.fin]
   local min1 = math.min(node1.pcs-node1.infectedPcs, a.passing)
-  print(min1)
   local min2 = math.min(node2.pcs-node2.infectedPcs, b.passing)
-  print(min2)
   return min1 > min2
 end
 
-function breadth(neighs)
-  local finish = false
-  local counter = _power
-  local notFullNodes = #neighs
-  local avg = _power/#neighs
-  while (counter >= .1 and not finish) do
-    finish = true
-    avg = counter/notFullNodes
-    for i=1,#neighs do
-      local fin = _nodes[neighs[i].fin]
-      if not fin.infected and neighs[i].passing ~= 0 then
-        local add = math.min(fin.pcs-fin.infectedPcs, avg, counter, neighs[i].passing)
+function distributeEqually(neighs, counter)
+  local avg = counter/#neighs
+  for i,edge in ipairs(neighs) do
+    _nodes[edge.fin].infectedPcs = _nodes[edge.fin].infectedPcs + avg
+    neighs[i].passing = neighs[i].passing - avg
+    if _nodes[edge.fin].infectedPcs == _nodes[edge.fin].pcs then
+      fin.infected = true
+      fin.resetIn = _resetInCons
+      neighs[i] = nil
+    end
+    if neighs[i].passing == 0 then
+      neighs[i] = nil
+    end
+  end
+end
+
+function breadth(neighs, counter, marked)
+  local counter = counter or _power
+  local marked = marked or {}
+  while (counter ~= 0 and #neighs ~= 0) do
+    table.sort(neighs, compareM)
+    local fin = _nodes[neighs[#neighs].fin]
+    local add = math.min(fin.pcs-fin.infectedPcs, neighs[#neighs].passing)
+    if (add*#neighs > counter) then
+      distributeEqually(neighs, counter)
+      return
+    end
+    for i=#neighs,1,-1 do
+      fin = _nodes[neighs[i].fin]
+      if marked[fin] then
+        neighs[i] = nil
+      elseif not fin.infected and neighs[i].passing ~= 0 then
         fin.infectedPcs = fin.infectedPcs + add
         neighs[i].passing = neighs[i].passing - add
         counter = counter - add
-        print(fin.infectedPcs, fin.pcs)
         if fin.infectedPcs == fin.pcs then
           fin.infected = true
           fin.resetIn = _resetInCons
-          notFullNodes = notFullNodes - 1
+          marked[fin] = true
+          neighs[i] = nil
+        elseif neighs[i].passing >= 0 then
+          marked[fin] = true
+          neighs[i] = nil
         end
-        if neighs[i].passing == 0 then
-          notFullNodes = notFullNodes - 1
-        end
-        finish = false
       end
     end
   end
@@ -162,22 +179,6 @@ function focusDepth(neighs)
   end
 end
 
-function distributeEqually(neighs, counter)
-  local avg = counter/#neighs
-  for i,edge in ipairs(neighs) do
-    _nodes[edge.fin].infectedPcs = _nodes[edge.fin].infectedPcs + avg
-    neighs[i].passing = neighs[i].passing - avg
-    if _nodes[edge.fin].infectedPcs == _nodes[edge.fin].pcs then
-      fin.infected = true
-      fin.resetIn = _resetInCons
-      neighs[i] = nil
-    end
-    if neighs[i].passing == 0 then
-      neighs[i] = nil
-    end
-  end
-end
-
 function focusBreadth(neighs)
   if #neighs == 0 then
     return
@@ -195,37 +196,7 @@ function focusBreadth(neighs)
     marked[fin] = true
   end
   neighs[#neighs] = nil
-  while (counter ~= 0 and #neighs ~= 0) do
-    table.sort(neighs, compareM)
-    fin = _nodes[neighs[#neighs].fin]
-    add = math.min(fin.pcs-fin.infectedPcs, neighs[#neighs].passing)
-    if (add*#neighs > counter) then
-      distributeEqually(neighs, counter)
-      return
-    end
-    for i=#neighs,1,-1 do
-      fin = _nodes[neighs[i].fin]
-      if marked[fin] then
-        neighs[i] = nil
-      elseif not fin.infected and neighs[i].passing ~= 0 then
-        fin.infectedPcs = fin.infectedPcs + add
-        neighs[i].passing = neighs[i].passing - add
-        counter = counter - add
-        print(fin.infectedPcs, fin.pcs)
-        if fin.infectedPcs == fin.pcs then
-          fin.infected = true
-          fin.resetIn = _resetInCons
-          print("Del index", i)
-          marked[fin] = true
-          neighs[i] = nil
-        elseif neighs[i].passing >= 0 then
-          print("Del index", i)
-          marked[fin] = true
-          neighs[i] = nil
-        end
-      end
-    end
-  end
+  breadth(neighs, counter, marked)
 end
 
 function moveVirus(type, neighNodes)
