@@ -102,6 +102,9 @@ function breadth(neighs)
 end
 
 function random(neighs)
+  if #neighs == 0 then
+    return
+  end
   local finish = false
   local pcounter = _power
   local ncounter = 0
@@ -142,6 +145,9 @@ function focusDepth(neighs)
 end
 
 function focusBreadth(neighs)
+  if #neighs == 0 then
+    return
+  end
   local finish = false
   local counter = _power
   local notFullNodes = #neighs - 1
@@ -249,7 +255,7 @@ function moveVirus(type, neighNodes)
 end
 
 function GRAPH_LOGIC.turn()
-  moveVirus(4, neighNodes) -- Set the type of the move here
+  moveVirus(1, neighNodes) -- Set the type of the move here
 end
 
 function GRAPH_LOGIC.nodes()
