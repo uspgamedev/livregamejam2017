@@ -64,6 +64,7 @@ function GRAPH_UI.node(i, x, y)
                            0, _RADIUS, -_RADIUS, 0)
   if node.protected then
     _push('scale', 1.2, 1.2)
+    _push('setLineWidth', 1)
     _push('polygon', 'line', 0, -_RADIUS, _RADIUS, 0,
                              0, _RADIUS, -_RADIUS, 0)
   end
