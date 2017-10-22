@@ -21,6 +21,8 @@ local _boost = false
 local _boostResetIn = 0
 local _BOOST_MAX = 3
 local _BOOST_FACTOR = 4
+local _virus_pts = 0
+local _antivirus_pts = 0
 
 local function newNode(capacity)
   return {
@@ -37,6 +39,19 @@ end
 
 local function newEdge(w)
   return (w ~= 0) and { weight = w, locked = false, resetIn = 0 } or false
+end
+
+function GRAPH_LOGIC.newGame()
+	-- Reset points
+	-- Reload the maps
+end
+
+local function verifyVictory()
+	if _virus_pts == 2 then
+		print("Virus won the match")
+	elseif _antivirus_pts == 2 then
+		print("CIA won the match")
+	end
 end
 
 function GRAPH_LOGIC.load(n)
@@ -287,19 +302,6 @@ function moveVirus(type, neighNodes)
     _boostResetIn = _BOOST_MAX
     _power = _power*_BOOST_FACTOR
   end
-  for i,node in ipairs(_nodes) do
-    if DEBUG then
-    print(i, tostring(node.infectedPcs).."/"..tostring(node.pcs), node.infected, node.resetIn, node.probeResetIn)
-    end
-    if _nodes[i].hasIntel and _nodes[i].infected then
-      print("Virus wins!!!")
-      return
-    end
-    if _nodes[i].hasIntel and _nodes[i].protected then
-      print("CIA wins!!!")
-      return
-    end
-  end
 end
 
 function GRAPH_LOGIC.turn()
@@ -309,6 +311,28 @@ function GRAPH_LOGIC.turn()
     _next_strat = _next_strat%#_strategy + 1
   end
   moveVirus(strat, neighNodes)
+
+  for i,node in ipairs(_nodes) do
+    if DEBUG then
+    print(i, tostring(node.infectedPcs).."/"..tostring(node.pcs), node.infected, node.resetIn, node.probeResetIn)
+    end
+    if _nodes[i].hasIntel and _nodes[i].infected then
+      print("Virus wins!!!")
+      _virus_pts = _virus_pts + 1
+      MAP_LOADER.switchMap()
+      newState()
+      return 1
+    end
+    if _nodes[i].hasIntel and _nodes[i].protected then
+      print("CIA wins!!!")
+      _antivirus_pts = _antivirus_pts + 1
+      MAP_LOADER.switchMap()
+      newState()
+      return 1
+    end
+  end
+
+  return 0
 end
 
 function GRAPH_LOGIC.nodes()

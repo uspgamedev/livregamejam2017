@@ -55,21 +55,18 @@ function ANTIVIRUS.load()
   ANTIVIRUS_HUD.load()
 	GRAPH_UI.load(MAP_LOADER.getTotal())
   GRAPH_LOGIC.load(MAP_LOADER.getTotal())
-  GRAPH_LOGIC.setStrategy{0, 4, 7, 1, 0}
-  for i,node in ipairs(GRAPH_LOGIC.nodes()) do
-    if node.hasIntel then
-      _intelNode = i
-      break
-    end
-  end
+  GRAPH_LOGIC.setStrategy{0, 4, 1, 0}
   map = MAP_LOADER.getCurrMap()
+  _intelNode = MAP_LOADER.getIntel()
 end
 
 function ANTIVIRUS.update(dt)
   -- Calculate turn time
   _turn_cooldown = _turn_cooldown + dt
   while _turn_cooldown >= _TURN_TIME do
-    GRAPH_LOGIC.turn()
+    if GRAPH_LOGIC.turn() == 1 then
+      ANTIVIRUS.load()
+    end
     _turn_cooldown = _turn_cooldown - _TURN_TIME
     _played = false
   end
