@@ -36,9 +36,14 @@ function GRAPH_LOGIC.load(n)
   for i=1,n do
 	  _nodes[i] = newNode(MAP_LOADER.getCapacity()[i])
   end
-  _nodes[_initialNode].infectedPcs = _nodes[_initialNode].pcs
-  _nodes[_initialNode].infected = true
-  _nodes[_initialNode].resetIn = _resetInCons
+  local infected = MAP_LOADER.getInfected()
+  _nodes[infected].infectedPcs = _nodes[infected].pcs
+  _nodes[infected].infected = true
+  _nodes[infected].resetIn = _resetInCons
+  local intel = MAP_LOADER.getIntel()
+  _nodes[intel].hasIntel = true
+  local protected = MAP_LOADER.getProtected()
+  _nodes[protected].protected = true
   for i=1,n do
 		_edges[i] = {}
 		-- Add file infos to edges

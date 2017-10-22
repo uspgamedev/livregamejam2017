@@ -48,10 +48,11 @@ function GRAPH_UI.node(i, x, y)
   local clicked = MOUSE.clicked(1) and near
   local glow = clicked and 1 or _nodes[i].glow
   local scale = near and _HOVER_SIZE or 1
+  local node = GRAPH_LOGIC.nodes()[i]
   _nodes[i].glow = glow
   _nodes[i].pos = {x,y}
   _push('push')
-  if GRAPH_LOGIC.nodes()[i].hasIntel then
+  if node.hasIntel then
     _push('setColor', COLOR.lerp(_IDLE_INTEL_COLOR, _CLICKED_INTEL_COLOR, glow))
   else
     _push('setColor', COLOR.lerp(_IDLE_COLOR, _CLICKED_COLOR, glow))
@@ -61,14 +62,18 @@ function GRAPH_UI.node(i, x, y)
   _push('scale', scale, scale)
   _push('polygon', 'fill', 0, -_RADIUS, _RADIUS, 0,
                            0, _RADIUS, -_RADIUS, 0)
+  if node.protected then
+    _push('scale', 1.2, 1.2)
+    _push('polygon', 'line', 0, -_RADIUS, _RADIUS, 0,
+                             0, _RADIUS, -_RADIUS, 0)
+  end
   _push('pop')
-  if near then
+  if near and not node.protected then
     _push('setColor', 240, 240, 240)
     _push('printf', GRAPH_LOGIC.nodes()[i].pcs, -_RADIUS, _RADIUS*1.5,
                                                 2*_RADIUS, 'center')
   end
 
-  local node = GRAPH_LOGIC.nodes()[i]
   if node.hasProbe then
     local percent = ("%d%%"):format(100 * node.infectedPcs / node.pcs)
     _push('setColor', 200, 140, 140)

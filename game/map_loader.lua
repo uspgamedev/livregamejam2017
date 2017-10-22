@@ -23,7 +23,7 @@ function MAP_LOADER.loadMaps()
 		table.insert(_maps, require('maps.' .. file))
 	end
 	--Pick one map randomly to be the first map of the game
-	_current_map = _maps[love.math.random(1, #_maps)]
+	_current_map = _maps[1]
 	table.insert(_used_maps, _current_map)
 end
 
@@ -32,6 +32,18 @@ function MAP_LOADER.switchMap()
 		_current_map = _maps[love.math.random(1, #_maps)]
 	until (mapUsed(_current_map)) 
 	table.insert(_used_maps, _current_map)
+end
+
+function MAP_LOADER.getIntel()
+  return _current_map['intel']
+end
+
+function MAP_LOADER.getInfected()
+  return _current_map['infected']
+end
+
+function MAP_LOADER.getProtected()
+  return _current_map['protected']
 end
 
 function MAP_LOADER.getCapacity()

@@ -55,7 +55,12 @@ function ANTIVIRUS.load()
   ANTIVIRUS_HUD.load()
 	GRAPH_UI.load(MAP_LOADER.getTotal())
   GRAPH_LOGIC.load(MAP_LOADER.getTotal())
-  GRAPH_LOGIC.nodes()[_intelNode].hasIntel = true
+  for i,node in ipairs(GRAPH_LOGIC.nodes()) do
+    if node.hasIntel then
+      _intelNode = i
+      break
+    end
+  end
   map = MAP_LOADER.getCurrMap()
 end
 
