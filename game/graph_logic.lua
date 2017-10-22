@@ -321,13 +321,13 @@ function GRAPH_LOGIC.turn()
     end
     if _nodes[i].hasIntel and _nodes[i].infected then
       print("Virus wins!!!")
-      setWhoWon("Virus")
+      setWhoWon("Hackx0rz")
       _virus_pts = _virus_pts + 1
       newState(1)
       return 1
     end
     if _nodes[i].hasIntel and _nodes[i].protected then
-      setWhoWon("Antivirus")
+      setWhoWon("Government")
       print("CIA wins!!!")
       _antivirus_pts = _antivirus_pts + 1
       newState(1)
