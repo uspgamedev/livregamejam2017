@@ -1,23 +1,12 @@
-
 local GRAPH_LOGIC = {}
+local MAP_LOADER = require 'map_loader'
+
 
 local _initialNode = 1 -- Test only variable
 
 local _resetInCons = 10 -- Change this at antivirus.lua too, when drawing edges
-local files = love.filesystem.getDirectoryItems("maps")
-local maps = {}
-for k, file in ipairs(files) do
-	file = string.sub(file, 1, -5)
-	table.insert(maps, require('maps.' .. file))
-end
 
-for i=1, 10 do
-	rand = love.math.random(1, #maps)
-	print(rand, #maps)
-end
-local map = maps[rand]
-
-local _testEdges = map['edges'] -- Test only variable to simulate a file input
+local _testEdges -- Test only variable to simulate a file input
 
 local _power = 4
 local _lastInfected = false
@@ -44,8 +33,9 @@ function GRAPH_LOGIC.load(n)
 
   _nodes = {}
   _edges = {}
+  _testEdges = MAP_LOADER.getEdges() 
   for i=1,n do
-	_nodes[i] = newNode(map['capacity'][i])
+	_nodes[i] = newNode(MAP_LOADER.getCapacity()[i])
   end
   _nodes[_initialNode].infectedPcs = _nodes[_initialNode].pcs
   _nodes[_initialNode].infected = true
@@ -263,14 +253,6 @@ end
 
 function GRAPH_LOGIC.connected(i, j)
   return not not _edges[i][j]
-end
-
-function GRAPH_LOGIC.total()
-	return map['total']
-end
-
-function GRAPH_LOGIC.map()
-	return map['map']
 end
 
 return GRAPH_LOGIC

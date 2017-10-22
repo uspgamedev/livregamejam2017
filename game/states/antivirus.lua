@@ -1,4 +1,4 @@
-
+local MAP_LOADER = require 'map_loader'
 local VEC2 = require 'cpml.vec2'
 local CURSOR = require 'view.cursor'
 local MOUSE = require 'view.helpers.mouse'
@@ -15,10 +15,10 @@ local _ACTIONS = {
   'probe_cluster',
 }
 
-local MAP = GRAPH_LOGIC.map()
+local map
 
 local DIR = {
-  'left', 'right', 'up', 'down',
+  'left', 'right', 'sup', 'down',
   'a', 'd', 'w', 's',
   left = VEC2(-1,0),
   a = VEC2(-1,0),
@@ -39,11 +39,11 @@ local _probeTime = 5
 local function getMidpoint(a, b)
   k = -8
 
-  dX = (MAP[b][1]-MAP[a][1])
-  dY = (MAP[b][2]-MAP[a][2])
+  dX = (map[b][1]-map[a][1])
+  dY = (map[b][2]-map[a][2])
   norm = 1/math.sqrt(dX*dX + dY*dY)
-  xMid = (MAP[a][1] + MAP[b][1])/2
-  yMid = (MAP[a][2] + MAP[b][2])/2
+  xMid = (map[a][1] + map[b][1])/2
+  yMid = (map[a][2] + map[b][2])/2
   x = (dY*norm)*k + xMid
   y = (-dX*norm)*k + yMid
 
@@ -53,9 +53,10 @@ end
 function ANTIVIRUS.load()
   _selected = 0
   ANTIVIRUS_HUD.load()
-	GRAPH_UI.load(GRAPH_LOGIC.total())
-  GRAPH_LOGIC.load(GRAPH_LOGIC.total())
+	GRAPH_UI.load(MAP_LOADER.getTotal())
+  GRAPH_LOGIC.load(MAP_LOADER.getTotal())
   GRAPH_LOGIC.nodes()[_intelNode].hasIntel = true
+  map = MAP_LOADER.getCurrMap()
 end
 
 function ANTIVIRUS.update(dt)
@@ -91,8 +92,8 @@ function ANTIVIRUS.update(dt)
   end
 
   -- Draw nodes
-  for i=1,GRAPH_LOGIC.total() do
-    if GRAPH_UI.node(i, MAP[i][1], MAP[i][2]) then
+  for i=1, MAP_LOADER.getTotal()  do
+    if GRAPH_UI.node(i, map[i][1], map[i][2]) then
       -- Add _selected = 0 and _turn_cooldown = _TURN_TIME in every action
       if action == 'move_intel' and GRAPH_LOGIC.connected(_intelNode, i) then
         GRAPH_LOGIC.nodes()[_intelNode].hasIntel = false
