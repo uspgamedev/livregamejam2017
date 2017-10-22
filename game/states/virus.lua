@@ -8,7 +8,7 @@ local _options
 
 function VIRUS.load()
   _max_strategies = 5
-  _strategies = {'asd'}
+  _strategies = {}
   _options = {
     'BFS', 'RANDOM'
   }
@@ -23,7 +23,7 @@ function VIRUS.update(dt)
     end
   end
   for _,option in ipairs(_options) do
-    if VIRUS_MENU.option(option) then
+    if VIRUS_MENU.option(option) and #_strategies < _max_strategies then
       table.insert(_strategies, option)
     end
   end
