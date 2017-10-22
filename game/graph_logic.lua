@@ -2,9 +2,6 @@
 local GRAPH_LOGIC = {}
 local MAP_LOADER = require 'map_loader'
 
-
-local _initialNode = 1 -- Test only variable
-
 local _resetInCons = 10 -- Change this at antivirus.lua too, when drawing edges
 
 local _testEdges -- Test only variable to simulate a file input
@@ -19,6 +16,11 @@ local _next_strat = 1
 local _sleeping = false
 local _sleepResetIn = 0
 local _SLEEP_MAX = 3
+
+local _boost = false
+local _boostResetIn = 0
+local _BOOST_MAX = 3
+local _BOOST_FACTOR = 4
 
 local function newNode(capacity)
   return {
@@ -240,6 +242,13 @@ function moveVirus(type, neighNodes)
       _sleeping = false
     end
   end
+  if _boost then
+    _boostResetIn = _boostResetIn - 1
+    if _boostResetIn == 0 then
+      _boost = false
+      _power = _power/_BOOST_FACTOR
+    end
+  end
   for i,edge in ipairs(neighNodes) do
 	  print(i, tostring(edge.ini)..','..tostring(edge.fin), edge.passing)
   end
@@ -272,6 +281,11 @@ function moveVirus(type, neighNodes)
     print('Sleep')
     _sleeping = true
     _sleepResetIn = _SLEEP_MAX
+  elseif type == 7 then
+    print('Boost')
+    _boost = true
+    _boostResetIn = _BOOST_MAX
+    _power = _power*_BOOST_FACTOR
   end
   for i,node in ipairs(_nodes) do
     if DEBUG then
