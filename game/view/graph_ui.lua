@@ -35,7 +35,12 @@ local function _mousePos()
   return mx, my
 end
 
-function GRAPH_UI.load(n)
+function GRAPH_UI.load(n, map)
+  for i,node in ipairs(GRAPH_LOGIC.nodes()) do
+    if node.hasIntel then
+      _camera = VEC2(unpack(map[i])) - VEC2(love.graphics.getDimensions())/2
+    end
+  end
   _nodes = {}
   for i=1,n do
     _nodes[i] = { glow = 0 }

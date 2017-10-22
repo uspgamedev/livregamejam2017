@@ -77,12 +77,14 @@ function GRAPH_LOGIC.load(n)
 		  _edges[i][j] = (j < i) and _edges[j][i] or newEdge(_testEdges[i][j])
 		end
   end
-  for i,line in ipairs(_edges) do
-    for j,edge in ipairs(_edges[i]) do
-      if not edge then
-        print(i, j, "false")
-      else
-        print(i, j, edge.weight)
+  if DEBUG then
+    for i,line in ipairs(_edges) do
+      for j,edge in ipairs(_edges[i]) do
+        if not edge then
+          print(i, j, "false")
+        else
+          print(i, j, edge.weight)
+        end
       end
     end
   end
