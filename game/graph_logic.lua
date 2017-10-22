@@ -11,16 +11,15 @@ for k, file in ipairs(files) do
 	table.insert(maps, require('maps.' .. file))
 end
 
-for i=1, 10 do
+for i=1,10 do
 	rand = love.math.random(1, #maps)
 	print(rand, #maps)
 end
 local map = maps[rand]
 
-local _testEdges = map['edges'] -- Test only variable to simulate a file input
+local _testEdges = map['edges']
 
 local _power = 4
-local _lastInfected = false
 local _nodes = {}
 local _edges = {}
 
@@ -32,7 +31,8 @@ local function newNode(capacity)
     resetIn = 0,
     hasIntel = false,
     hasProbe = false,
-    probeResetIn = 0
+    probeResetIn = 0,
+    protected = false
   }
 end
 
@@ -41,11 +41,10 @@ local function newEdge(w)
 end
 
 function GRAPH_LOGIC.load(n)
-
   _nodes = {}
   _edges = {}
   for i=1,n do
-	_nodes[i] = newNode(map['capacity'][i])
+	  _nodes[i] = newNode(map['capacity'][i])
   end
   _nodes[_initialNode].infectedPcs = 10
   _nodes[_initialNode].infected = true
@@ -188,9 +187,9 @@ function moveVirus(type, neighNodes)
   for i=1,#_nodes do
     for j=i+1,#_nodes do
       if _edges[i][j] and not _edges[i][j].locked then
-        if not _nodes[i].infected and _nodes[j].infected then
+        if not _nodes[i].infected and _nodes[j].infected and not _nodes[i].protected then
           table.insert(neighNodes, { ini = j, fin = i, passing = _edges[i][j].weight })
-        elseif _nodes[i].infected and not _nodes[j].infected then
+        elseif _nodes[i].infected and not _nodes[j].infected and not _nodes[j].protected then
           table.insert(neighNodes, { ini = i, fin = j, passing = _edges[i][j].weight })
         end
       elseif _edges[i][j] and _edges[i][j].locked then
@@ -213,10 +212,14 @@ function moveVirus(type, neighNodes)
         _nodes[i].hasProbe = false
       end
     end
-  end
-  if #neighNodes == 0 then
-	  print("Virus win!!!")
-	  return
+    if _nodes[i].hasIntel and _nodes[i].infected then
+      print("Virus wins!!!")
+      return
+    end
+    if _nodes[i].hasIntel and _nodes[i].protected then
+      print("CIA wins!!!")
+      return
+    end
   end
   for i,edge in ipairs(neighNodes) do
 	  print(i, tostring(edge.ini)..','..tostring(edge.fin), edge.passing)
