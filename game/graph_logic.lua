@@ -276,27 +276,27 @@ function moveVirus(type, neighNodes)
   elseif type == 2 then
   	print('Random')
   	random(neighNodes)
-  elseif type == 3 then
+  elseif type == 0 then
   	print('Depth greedy')
   	table.sort(neighNodes, compareD)
   	focusDepth(neighNodes)
-  elseif type == 4 then
+  elseif type == 0 then
   	print('Depth humble')
   	table.sort(neighNodes, compareA)
   	focusDepth(neighNodes)
-  elseif type == 5 then
+  elseif type == 0 then
   	print('Beadth greedy')
   	table.sort(neighNodes, compareD)
   	focusBreadth(neighNodes)
-  elseif type == 6 then
+  elseif type == 0 then
   	print('Beadth humble')
   	table.sort(neighNodes, compareA)
   	focusBreadth(neighNodes)
-  elseif type == 7 then
+  elseif type == 3 then
     print('Sleep')
     _sleeping = true
     _sleepResetIn = _SLEEP_MAX
-  elseif type == 8 then
+  elseif type == 4 then
     print('Boost')
     _boost = true
     _boostResetIn = _BOOST_MAX

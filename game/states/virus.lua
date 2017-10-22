@@ -10,8 +10,8 @@ function VIRUS.load()
   _max_strategies = 5
   _strategies = {}
   _options = {
-    'Spread', 'Random', 'Focus +', 'Focus -', 'Hybrid +', 'Hybrid -',
-    'Hide', 'Boost'
+    'spread', 'random', --'focus +', 'focus -', --'hybrid +', 'hybrid -',
+    'hide', 'boost'
   }
   VIRUS_MENU.load(_max_strategies)
 end
