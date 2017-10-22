@@ -6,6 +6,7 @@ local BG = require 'view.background'
 local who_won
 
 gamestates = {
+  require 'states.title',
   require 'states.virus',
   require 'states.wait',
   require 'states.antivirus',

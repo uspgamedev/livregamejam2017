@@ -49,6 +49,8 @@ end
 
 function VIRUS_MENU.load(max_strategies)
   _max_strategies = max_strategies
+  _strategies = {}
+  _options = {}
 end
 
 function VIRUS_MENU.update(dt)
@@ -87,7 +89,7 @@ function VIRUS_MENU.draw()
     g.translate(_SLOT_HOOK:unpack())
     local l,r,t,b = _slotBounds(i)
     local strategy = _strategies[i]
-    if strategy.name then
+    if strategy and strategy.name then
       g.setColor(100, 240, 100, 255)
       g.rectangle('fill', l, t, r-l, b-t)
       if strategy.hover then
