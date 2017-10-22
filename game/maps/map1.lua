@@ -18,9 +18,9 @@ return {
     15,
     10
   },
-  protected = 15,
-  infected = 11,
-  intel = 2,
+  protected = 16,
+  infected = 7,
+  intel = 1,
   edges = {
     {{2,5}, {3,5}, {6,5}},
     {{1,5}, {4,5}, {5,5}, {6,5}},

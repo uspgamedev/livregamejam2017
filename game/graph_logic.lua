@@ -9,7 +9,7 @@ local _resetInCons = 10 -- Change this at antivirus.lua too, when drawing edges
 
 local _testEdges -- Test only variable to simulate a file input
 
-local _power = 5
+local _power = 20
 local _nodes = {}
 local _edges = {}
 
@@ -214,14 +214,6 @@ function moveVirus(type, neighNodes)
         _nodes[i].hasProbe = false
       end
     end
-    if _nodes[i].hasIntel and _nodes[i].infected then
-      print("Virus wins!!!")
-      return
-    end
-    if _nodes[i].hasIntel and _nodes[i].protected then
-      print("CIA wins!!!")
-      return
-    end
   end
   for i,edge in ipairs(neighNodes) do
 	  print(i, tostring(edge.ini)..','..tostring(edge.fin), edge.passing)
@@ -250,12 +242,22 @@ function moveVirus(type, neighNodes)
   	focusBreadth(neighNodes)
   end
   for i,node in ipairs(_nodes) do
+    if DEBUG then
     print(i, tostring(node.infectedPcs).."/"..tostring(node.pcs), node.infected, node.resetIn, node.probeResetIn)
+    end
+    if _nodes[i].hasIntel and _nodes[i].infected then
+      print("Virus wins!!!")
+      return
+    end
+    if _nodes[i].hasIntel and _nodes[i].protected then
+      print("CIA wins!!!")
+      return
+    end
   end
 end
 
 function GRAPH_LOGIC.turn()
-  moveVirus(1, neighNodes) -- Set the type of the move here
+  moveVirus(4, neighNodes) -- Set the type of the move here
 end
 
 function GRAPH_LOGIC.nodes()
