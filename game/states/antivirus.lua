@@ -55,6 +55,7 @@ function ANTIVIRUS.load()
   ANTIVIRUS_HUD.load()
 	GRAPH_UI.load(MAP_LOADER.getTotal())
   GRAPH_LOGIC.load(MAP_LOADER.getTotal())
+  GRAPH_LOGIC.setStrategy{0, 4, 1, 0}
   for i,node in ipairs(GRAPH_LOGIC.nodes()) do
     if node.hasIntel then
       _intelNode = i

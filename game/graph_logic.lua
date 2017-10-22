@@ -13,6 +13,9 @@ local _power = 20
 local _nodes = {}
 local _edges = {}
 
+local _strategy
+local _next_strat = 1
+
 local function newNode(capacity)
   return {
     pcs = capacity,
@@ -33,6 +36,7 @@ end
 function GRAPH_LOGIC.load(n)
   _nodes = {}
   _edges = {}
+  _next_strat = 1
   _testEdges = MAP_LOADER.getEdges()
   for i=1,n do
 	  _nodes[i] = newNode(MAP_LOADER.getCapacity()[i])
@@ -63,6 +67,10 @@ function GRAPH_LOGIC.load(n)
   end
 end
 
+function GRAPH_LOGIC.setStrategy(strat)
+  _strategy = strat
+end
+
 local function compareD(a, b)
   return _nodes[a.fin].pcs > _nodes[b.fin].pcs
 end
@@ -76,7 +84,7 @@ function breadth(neighs)
   local counter = _power
   local notFullNodes = #neighs
   local avg = _power/#neighs
-  while (counter ~= 0 and not finish) do
+  while (counter >= .1 and not finish) do
     finish = true
     avg = counter/notFullNodes
     for i=1,#neighs do
@@ -159,7 +167,7 @@ function focusBreadth(neighs)
   if fin.infectedPcs == fin.pcs then
 	fin.infected = true
   end
-  while (counter <= 0.1 and not finish) do
+  while (counter >= 0.1 and not finish) do
     finish = true
     avg = counter/notFullNodes
     for i=2,#neighs do
@@ -257,7 +265,12 @@ function moveVirus(type, neighNodes)
 end
 
 function GRAPH_LOGIC.turn()
-  moveVirus(4, neighNodes) -- Set the type of the move here
+  local strat = 0 -- Set the default type of the move here
+  if _strategy then
+    strat = _strategy[_next_strat]
+    _next_strat = _next_strat%#_strategy + 1
+  end
+  moveVirus(strat, neighNodes)
 end
 
 function GRAPH_LOGIC.nodes()
