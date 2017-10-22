@@ -30,7 +30,9 @@ function newNode(capacity)
     infectedPcs = 0,
     infected = false,
     resetIn = 0,
-    hasIntel = false
+    hasIntel = false,
+    hasProbe = false,
+    probeResetIn = 0
   }
 end
 
@@ -205,39 +207,45 @@ function moveVirus(type, neighNodes)
         _nodes[i].infectedPcs = 0
       end
     end
+    if _nodes[i].hasProbe then
+      _nodes[i].probeResetIn = _nodes[i].probeResetIn - 1
+      if _nodes[i].probeResetIn == 0 then
+        _nodes[i].hasProbe = false
+      end
+    end
   end
   if #neighNodes == 0 then
-	print("Virus win!!!")
-	return
+	  print("Virus win!!!")
+	  return
   end
   for i,edge in ipairs(neighNodes) do
-	print(i, tostring(edge.ini)..','..tostring(edge.fin), edge.passing)
+	  print(i, tostring(edge.ini)..','..tostring(edge.fin), edge.passing)
   end
   if type == 0 then
-	print('BFS')
-	breadth(neighNodes)
+  	print('BFS')
+  	breadth(neighNodes)
   elseif type == 1 then
-	print('Random')
-	random(neighNodes)
+  	print('Random')
+  	random(neighNodes)
   elseif type == 2 then
-	print('Depth greedy')
-	table.sort(neighNodes, compareD)
-	focusDepth(neighNodes)
+  	print('Depth greedy')
+  	table.sort(neighNodes, compareD)
+  	focusDepth(neighNodes)
   elseif type == 3 then
-	print('Depth humble')
-	table.sort(neighNodes, compareA)
-	focusDepth(neighNodes)
+  	print('Depth humble')
+  	table.sort(neighNodes, compareA)
+  	focusDepth(neighNodes)
   elseif type == 4 then
-	print('Beadth greedy')
-	table.sort(neighNodes, compareD)
-	focusBreadth(neighNodes)
+  	print('Beadth greedy')
+  	table.sort(neighNodes, compareD)
+  	focusBreadth(neighNodes)
   elseif type == 5 then
-	print('Beadth humble')
-	table.sort(neighNodes, compareA)
-	focusBreadth(neighNodes)
+  	print('Beadth humble')
+  	table.sort(neighNodes, compareA)
+  	focusBreadth(neighNodes)
   end
   for i,node in ipairs(_nodes) do
-    print(i, tostring(node.infectedPcs).."/"..tostring(node.pcs), node.infected, node.resetIn)
+    print(i, tostring(node.infectedPcs).."/"..tostring(node.pcs), node.infected, node.resetIn, node.probeResetIn)
   end
 end
 

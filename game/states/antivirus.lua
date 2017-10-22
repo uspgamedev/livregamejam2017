@@ -33,7 +33,8 @@ local DIR = {
 local _selected = 0
 local _turn_cooldown = 0
 local _played = false
-local _initialIntel = 1
+local _intelNode = 1
+local _probeTime = 5
 
 local function getMidpoint(a, b)
   k = -8
@@ -54,7 +55,7 @@ function ANTIVIRUS.load()
   ANTIVIRUS_HUD.load()
 	GRAPH_UI.load(GRAPH_LOGIC.total())
   GRAPH_LOGIC.load(GRAPH_LOGIC.total())
-  GRAPH_LOGIC.nodes()[_initialIntel].hasIntel = true
+  GRAPH_LOGIC.nodes()[_intelNode].hasIntel = true
 end
 
 function ANTIVIRUS.update(dt)
@@ -94,9 +95,14 @@ function ANTIVIRUS.update(dt)
     if GRAPH_UI.node(i, MAP[i][1], MAP[i][2]) then
       -- Add _selected = 0 and _turn_cooldown = _TURN_TIME in every action
       if action == 'move_intel' then
-        GRAPH_LOGIC.nodes()[_initialIntel].hasIntel = false
+        GRAPH_LOGIC.nodes()[_intelNode].hasIntel = false
         GRAPH_LOGIC.nodes()[i].hasIntel = true
-        _initialIntel = i
+        _intelNode = i
+        _selected = 0
+        _turn_cooldown = _TURN_TIME
+      elseif action == 'probe_cluster' then
+        GRAPH_LOGIC.nodes()[i].hasProbe = true
+        GRAPH_LOGIC.nodes()[i].probeResetIn = _probeTime
         _selected = 0
         _turn_cooldown = _TURN_TIME
       end
