@@ -12,13 +12,13 @@ local _state = gamestates.virus
 
 local _bgm
 
-function newState()
+function newState(...)
   if _state == gamestates.virus then
     _state = gamestates.antivirus
-    _state.load()
+    _state.load(...)
   else
     _state = gamestates.virus
-    _state.load()
+    _state.load(...)
   end
 
   return _state

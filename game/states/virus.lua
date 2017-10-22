@@ -10,7 +10,8 @@ function VIRUS.load()
   _max_strategies = 5
   _strategies = {}
   _options = {
-    'BFS', 'RANDOM'
+    'Spread', 'Random', 'Focus +', 'Focus -', 'Hybrid +', 'Hybrid -',
+    'Hide', 'Boost'
   }
   VIRUS_MENU.load(_max_strategies)
 end
@@ -18,17 +19,17 @@ end
 function VIRUS.update(dt)
   VIRUS_MENU.update(dt)
   for i=1,_max_strategies do
-    if VIRUS_MENU.slot(_strategies[i]) then
+    if VIRUS_MENU.slot(_options[_strategies[i]]) then
       table.remove(_strategies, i)
     end
   end
-  for _,option in ipairs(_options) do
+  for i,option in ipairs(_options) do
     if VIRUS_MENU.option(option) and #_strategies < _max_strategies then
-      table.insert(_strategies, option)
+      table.insert(_strategies, i)
     end
   end
   if VIRUS_MENU.confirm() then
-    newState()
+    newState(_strategies)
   end
 end
 

@@ -29,7 +29,11 @@ local function _slotBounds(i, global)
 end
 
 local function _optionBounds(i, global)
-  local topleft = VEC2(1,0) * (_OPTION_SIZE.y + _OPTION_GAP)*(i-1)
+  i = i-1
+  local j = i % 4
+  local i = math.floor(i / 4)
+  local topleft = VEC2(1,0) * (_OPTION_SIZE.x + _OPTION_GAP)*j
+                + VEC2(0,1) * (_OPTION_SIZE.y + _OPTION_GAP)*i
   if global then
     topleft = topleft + _OPTION_HOOK
   end

@@ -270,33 +270,33 @@ function moveVirus(type, neighNodes)
   for i,node in ipairs(_nodes) do
     print(i, tostring(node.infectedPcs).."/"..tostring(node.pcs), node.infected, node.resetIn, node.probeResetIn)
   end
-  if type == 0 then
+  if type == 1 then
   	print('BFS')
   	breadth(neighNodes)
-  elseif type == 1 then
+  elseif type == 2 then
   	print('Random')
   	random(neighNodes)
-  elseif type == 2 then
+  elseif type == 3 then
   	print('Depth greedy')
   	table.sort(neighNodes, compareD)
   	focusDepth(neighNodes)
-  elseif type == 3 then
+  elseif type == 4 then
   	print('Depth humble')
   	table.sort(neighNodes, compareA)
   	focusDepth(neighNodes)
-  elseif type == 4 then
+  elseif type == 5 then
   	print('Beadth greedy')
   	table.sort(neighNodes, compareD)
   	focusBreadth(neighNodes)
-  elseif type == 5 then
+  elseif type == 6 then
   	print('Beadth humble')
   	table.sort(neighNodes, compareA)
   	focusBreadth(neighNodes)
-  elseif type == 6 then
+  elseif type == 7 then
     print('Sleep')
     _sleeping = true
     _sleepResetIn = _SLEEP_MAX
-  elseif type == 7 then
+  elseif type == 8 then
     print('Boost')
     _boost = true
     _boostResetIn = _BOOST_MAX
@@ -305,7 +305,7 @@ function moveVirus(type, neighNodes)
 end
 
 function GRAPH_LOGIC.turn()
-  local strat = 0 -- Set the default type of the move here
+  local strat = 1 -- Set the default type of the move here
   if _strategy then
     strat = _strategy[_next_strat]
     _next_strat = _next_strat%#_strategy + 1
