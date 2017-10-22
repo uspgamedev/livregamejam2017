@@ -12,10 +12,12 @@ local _IDLE_COLOR = COLOR(101, 141, 206, 255)
 local _HOVER_SIZE = 1.2
 local _CLICKED_COLOR = COLOR(0, 255, 255, 255)
 local _DECAY = 5
+local _IDLE_INTEL_COLOR = COLOR(100, 180, 20, 255)
+local _CLICKED_INTEL_COLOR = COLOR(205, 205, 85, 255)
 
 local _EDGE_CLICK_WIDTH = 16
 local _EDGE_COLOR = COLOR(100, 100, 100, 255)
-local _LOCKED_EDGE_COLOR = COLOR(255, 0, 0, 255)
+local _LOCKED_EDGE_COLOR = COLOR(225, 50, 50, 255)
 
 local _queue = {}
 
@@ -49,7 +51,11 @@ function GRAPH_UI.node(i, x, y)
   _nodes[i].glow = glow
   _nodes[i].pos = {x,y}
   _push('push')
-  _push('setColor', COLOR.lerp(_IDLE_COLOR, _CLICKED_COLOR, glow))
+  if GRAPH_LOGIC.nodes()[i].hasIntel then
+    _push('setColor', COLOR.lerp(_IDLE_INTEL_COLOR, _CLICKED_INTEL_COLOR, glow))
+  else
+    _push('setColor', COLOR.lerp(_IDLE_COLOR, _CLICKED_COLOR, glow))
+  end
   _push('translate', x, y)
   _push('scale', scale, scale)
   _push('polygon', 'fill', 0, -_RADIUS, _RADIUS, 0,

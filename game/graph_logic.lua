@@ -15,7 +15,7 @@ for i=1, 10 do
 	rand = love.math.random(1, #maps)
 	print(rand, #maps)
 end
-local map = maps[rand] 
+local map = maps[rand]
 
 local _testEdges = map['edges'] -- Test only variable to simulate a file input
 
@@ -29,7 +29,8 @@ function newNode(capacity)
     pcs = capacity,
     infectedPcs = 0,
     infected = false,
-    resetIn = 0
+    resetIn = 0,
+    hasIntel = false
   }
 end
 
