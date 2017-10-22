@@ -94,7 +94,7 @@ function ANTIVIRUS.update(dt)
   for i=1,GRAPH_LOGIC.total() do
     if GRAPH_UI.node(i, MAP[i][1], MAP[i][2]) then
       -- Add _selected = 0 and _turn_cooldown = _TURN_TIME in every action
-      if action == 'move_intel' then
+      if action == 'move_intel' and GRAPH_LOGIC.connected(_intelNode, i) then
         GRAPH_LOGIC.nodes()[_intelNode].hasIntel = false
         GRAPH_LOGIC.nodes()[i].hasIntel = true
         _intelNode = i
@@ -113,7 +113,8 @@ function ANTIVIRUS.update(dt)
   for i=1,#GRAPH_LOGIC.nodes() do
     for j=i+1,#GRAPH_LOGIC.nodes() do
       if GRAPH_LOGIC.edges()[i][j] and
-         GRAPH_UI.edge(i, j, GRAPH_LOGIC.edges()[i][j].weight, getMidpoint(i, j)) then
+         GRAPH_UI.edge(i, j, GRAPH_LOGIC.edges()[i][j].weight,
+                       getMidpoint(i, j)) then
         -- Add _selected = 0 and _turn_cooldown = _TURN_TIME in every action
         if action == 'lock_route' then
           GRAPH_LOGIC.edges()[i][j].locked = true

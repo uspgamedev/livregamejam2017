@@ -24,7 +24,7 @@ local _lastInfected = false
 local _nodes = {}
 local _edges = {}
 
-function newNode(capacity)
+local function newNode(capacity)
   return {
     pcs = capacity,
     infectedPcs = 0,
@@ -36,7 +36,7 @@ function newNode(capacity)
   }
 end
 
-function newEdge(w)
+local function newEdge(w)
   return (w ~= 0) and { weight = w, locked = false, resetIn = 0 } or false
 end
 
@@ -58,13 +58,13 @@ function GRAPH_LOGIC.load(n)
 		end
   end
   for i,line in ipairs(_edges) do
-	for j,edge in ipairs(_edges[i]) do
-	  if not edge then
-		print(i, j, "false")
-	  else
-		print(i, j, edge.weight)
-	  end
-	end
+    for j,edge in ipairs(_edges[i]) do
+      if not edge then
+        print(i, j, "false")
+      else
+        print(i, j, edge.weight)
+      end
+    end
   end
 end
 
@@ -259,6 +259,10 @@ end
 
 function GRAPH_LOGIC.edges()
   return _edges
+end
+
+function GRAPH_LOGIC.connected(i, j)
+  return not not _edges[i][j]
 end
 
 function GRAPH_LOGIC.total()
