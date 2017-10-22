@@ -18,7 +18,7 @@ local _ACTIONS = {
 local map
 
 local DIR = {
-  'left', 'right', 'sup', 'down',
+  'left', 'right', 'up', 'down',
   'a', 'd', 'w', 's',
   left = VEC2(-1,0),
   a = VEC2(-1,0),
