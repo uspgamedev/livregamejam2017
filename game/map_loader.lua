@@ -47,10 +47,10 @@ function MAP_LOADER.loadMaps()
 	table.insert(_used_maps, _current_map)
 end
 
-function MAP_LOADER.switchMap()	
+function MAP_LOADER.switchMap()
 	repeat
-		_current_map = _maps[love.math.random(1, #_maps)]
-	until (mapUsed(_current_map)) 
+		_current_map = _maps[3]
+	until (mapUsed(_current_map))
 	table.insert(_used_maps, _current_map)
 end
 

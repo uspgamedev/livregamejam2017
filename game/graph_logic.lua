@@ -111,9 +111,10 @@ end
 function distributeEqually(neighs, counter)
   local avg = counter/#neighs
   for i,edge in ipairs(neighs) do
-    _nodes[edge.fin].infectedPcs = _nodes[edge.fin].infectedPcs + avg
+    local fin = _nodes[edge.fin]
+    fin.infectedPcs = fin.infectedPcs + avg
     neighs[i].passing = neighs[i].passing - avg
-    if _nodes[edge.fin].infectedPcs == _nodes[edge.fin].pcs then
+    if fin.infectedPcs == fin.pcs then
       fin.infected = true
       fin.resetIn = _resetInCons
       neighs[i] = nil
