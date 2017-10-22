@@ -17,6 +17,7 @@ local _max_strategies
 local _slots
 local _strategies
 local _options
+local _confirm_hovered
 
 local function _slotBounds(i, global)
   local topleft = VEC2(0,1) * (_SLOT_SIZE.y + _SLOT_GAP)*(i-1)
@@ -34,6 +35,11 @@ local function _optionBounds(i, global)
   end
   return topleft.x, topleft.x + _OPTION_SIZE.x,
          topleft.y, topleft.y + _OPTION_SIZE.y
+end
+
+local function _confirmBounds()
+  local w,h = love.graphics.getDimensions()
+  return w - 400, w - 200, h - 200, h - 160
 end
 
 function VIRUS_MENU.load(max_strategies)
@@ -58,6 +64,14 @@ function VIRUS_MENU.option(name)
   local mx, my = MOUSE.pos()
   local inside = mx > l and mx < r and my > t and my < b
   table.insert(_options, { name = name, hover = inside })
+  return inside and MOUSE.clicked(1)
+end
+
+function VIRUS_MENU.confirm()
+  local l,r,t,b = _confirmBounds()
+  local mx, my = MOUSE.pos()
+  local inside = mx > l and mx < r and my > t and my < b
+  _confirm_hovered = inside
   return inside and MOUSE.clicked(1)
 end
 
@@ -99,6 +113,13 @@ function VIRUS_MENU.draw()
     g.rectangle('fill', l, t, r-l, b-t)
     g.pop()
   end
+  local l,r,t,b = _confirmBounds()
+  if _confirm_hovered then
+    g.setColor(200, 240, 200, 255)
+  else
+    g.setColor(100, 240, 100, 255)
+  end
+  g.rectangle('fill', l, t, r-l, b-t)
 end
 
 return VIRUS_MENU

@@ -27,6 +27,9 @@ function VIRUS.update(dt)
       table.insert(_strategies, option)
     end
   end
+  if VIRUS_MENU.confirm() then
+    print"hue"
+  end
 end
 
 function  VIRUS.draw()
