@@ -9,7 +9,7 @@ local _resetInCons = 10 -- Change this at antivirus.lua too, when drawing edges
 
 local _testEdges -- Test only variable to simulate a file input
 
-local _power = 5
+local _power = 100
 local _nodes = {}
 local _edges = {}
 
@@ -69,6 +69,16 @@ end
 
 local function compareA(a, b)
   return _nodes[a.fin].pcs < _nodes[b.fin].pcs
+end
+
+local function compareM(a, b)
+  local node1 = _nodes[a.fin]
+  local node2 = _nodes[b.fin]
+  local min1 = math.min(node1.pcs-node1.infectedPcs, a.passing)
+  print(min1)
+  local min2 = math.min(node2.pcs-node2.infectedPcs, b.passing)
+  print(min2)
+  return min1 > min2
 end
 
 function breadth(neighs)
@@ -144,28 +154,52 @@ function focusDepth(neighs)
   end
 end
 
+function distributeEqually(neighs, counter)
+  local avg = counter/#neighs
+  for i,edge in ipairs(neighs) do
+    _nodes[edge.fin].infectedPcs = _nodes[edge.fin].infectedPcs + avg
+    neighs[i].passing = neighs[i].passing - avg
+    if _nodes[edge.fin].infectedPcs == _nodes[edge.fin].pcs then
+      fin.infected = true
+      fin.resetIn = _resetInCons
+      neighs[i] = nil
+    end
+    if neighs[i].passing == 0 then
+      neighs[i] = nil
+    end
+  end
+end
+
 function focusBreadth(neighs)
   if #neighs == 0 then
     return
   end
   local finish = false
   local counter = _power
-  local notFullNodes = #neighs - 1
-  local avg = _power/(#neighs-1)
-  local fin = _nodes[neighs[1].fin]
-  local add = math.min(fin.pcs-fin.infectedPcs, counter, neighs[1].passing)
+  local fin = _nodes[neighs[#neighs].fin]
+  local add = math.min(fin.pcs-fin.infectedPcs, counter, neighs[#neighs].passing)
+  local marked = {}
   fin.infectedPcs = fin.infectedPcs + add
   counter = counter - add
   if fin.infectedPcs == fin.pcs then
-	fin.infected = true
+	  fin.infected = true
+    fin.resetIn = _resetInCons
+    marked[fin] = true
   end
-  while (counter ~= 0 and not finish) do
-    finish = true
-    avg = counter/notFullNodes
-    for i=2,#neighs do
+  neighs[#neighs] = nil
+  while (counter ~= 0 and #neighs ~= 0) do
+    table.sort(neighs, compareM)
+    fin = _nodes[neighs[#neighs].fin]
+    add = math.min(fin.pcs-fin.infectedPcs, neighs[#neighs].passing)
+    if (add*#neighs > counter) then
+      distributeEqually(neighs, counter)
+      return
+    end
+    for i=#neighs,1,-1 do
       fin = _nodes[neighs[i].fin]
-      if not fin.infected and neighs[i].passing ~= 0 then
-        add = math.min(fin.pcs-fin.infectedPcs, avg, counter, neighs[i].passing)
+      if marked[fin] then
+        neighs[i] = nil
+      elseif not fin.infected and neighs[i].passing ~= 0 then
         fin.infectedPcs = fin.infectedPcs + add
         neighs[i].passing = neighs[i].passing - add
         counter = counter - add
@@ -173,12 +207,14 @@ function focusBreadth(neighs)
         if fin.infectedPcs == fin.pcs then
           fin.infected = true
           fin.resetIn = _resetInCons
-          notFullNodes = notFullNodes - 1
+          print("Del index", i)
+          marked[fin] = true
+          neighs[i] = nil
+        elseif neighs[i].passing >= 0 then
+          print("Del index", i)
+          marked[fin] = true
+          neighs[i] = nil
         end
-        if neighs[i].passing == 0 then
-          notFullNodes = notFullNodes - 1
-        end
-        finish = false
       end
     end
   end
@@ -226,6 +262,9 @@ function moveVirus(type, neighNodes)
   for i,edge in ipairs(neighNodes) do
 	  print(i, tostring(edge.ini)..','..tostring(edge.fin), edge.passing)
   end
+  for i,node in ipairs(_nodes) do
+    print(i, tostring(node.infectedPcs).."/"..tostring(node.pcs), node.infected, node.resetIn, node.probeResetIn)
+  end
   if type == 0 then
   	print('BFS')
   	breadth(neighNodes)
@@ -255,7 +294,7 @@ function moveVirus(type, neighNodes)
 end
 
 function GRAPH_LOGIC.turn()
-  moveVirus(1, neighNodes) -- Set the type of the move here
+  moveVirus(4, neighNodes) -- Set the type of the move here
 end
 
 function GRAPH_LOGIC.nodes()
