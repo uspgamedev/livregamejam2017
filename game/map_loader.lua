@@ -31,6 +31,7 @@ local function mapUsed(map)
 			used = true
 		end
 	end
+	return used
 end
 
 -- Function called once in the main file

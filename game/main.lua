@@ -1,17 +1,28 @@
-
 local MAP_LOADER = require 'map_loader'
 local MOUSE = require 'view.helpers.mouse'
 local CURSOR = require 'view.cursor'
 local BG = require 'view.background'
 
-local gamestates = {
+gamestates = {
   virus = require 'states.virus',
   antivirus = require 'states.antivirus'
 }
 
-local state = gamestates.virus
+local _state = gamestates.virus
 
 local _bgm
+
+function newState()
+  if _state == gamestates.virus then
+    _state = gamestates.antivirus
+    _state.load()
+  else
+    _state = gamestates.virus
+    _state.load()
+  end
+
+  return _state
+end
 
 function love.load(arg)
   if arg[2] then
@@ -24,37 +35,24 @@ function love.load(arg)
   MAP_LOADER.loadMaps()
   BG.load()
   CURSOR.load()
-  state.load()
-end
-
-local function newState(state)
-  if state == gamestates.virus then
-    state = gamestates.antivirus
-  else
-    state = gamestates.virus
-  end
-
-  return state
+  _state.load()
+  _virus_pts = 0
+  _antivirus_pts = 0
 end
 
 function love.update(dt)
   BG.update(dt)
   MOUSE.update(dt)
-  state.update(dt)
+  _state.update(dt)
 end
 
 function love.keypressed(key)
-  if key == 'space' then
-    state = newState(state)
-    state.load()
-  elseif key == 'l' then
-    state.iterateVirus()
-  elseif key == 'escape' then
+  if key == 'escape' then
     love.event.quit()
   end
 end
 
 function love.draw()
   BG.draw()
-  state.draw()
+  _state.draw()
 end

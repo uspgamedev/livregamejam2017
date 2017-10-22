@@ -28,7 +28,7 @@ function VIRUS.update(dt)
     end
   end
   if VIRUS_MENU.confirm() then
-    print"hue"
+    newState()
   end
 end
 
