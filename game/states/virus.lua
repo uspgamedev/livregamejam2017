@@ -1,4 +1,5 @@
 
+local SFX = require 'sound'
 local VIRUS_MENU = require 'view.virus_menu'
 local VIRUS = {}
 
@@ -21,15 +22,18 @@ function VIRUS.update(dt)
   for i=1,_max_strategies do
     if VIRUS_MENU.slot(_options[_strategies[i]]) then
       table.remove(_strategies, i)
+      SFX.play "Deletando Hab op 2"
     end
   end
   for i,option in ipairs(_options) do
     if VIRUS_MENU.option(option) and #_strategies < _max_strategies then
       table.insert(_strategies, i)
+      SFX.play "Escolhendo hab virus"
     end
   end
   if VIRUS_MENU.confirm() then
     newState(2, _strategies)
+    SFX.play "Compilar"
   end
 end
 

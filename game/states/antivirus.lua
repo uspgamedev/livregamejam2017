@@ -1,3 +1,5 @@
+
+local SFX = require 'sound'
 local MAP_LOADER = require 'map_loader'
 local VEC2 = require 'cpml.vec2'
 local CURSOR = require 'view.cursor'
@@ -65,6 +67,7 @@ function ANTIVIRUS.update(dt)
   _turn_cooldown = _turn_cooldown + dt
   while _turn_cooldown >= _TURN_TIME do
     if GRAPH_LOGIC.turn() == 1 then
+      SFX.play "Perder Partida"
       ANTIVIRUS.load()
     end
     _turn_cooldown = _turn_cooldown - _TURN_TIME
@@ -76,6 +79,9 @@ function ANTIVIRUS.update(dt)
   for i,action in ipairs(_ACTIONS) do
     if ANTIVIRUS_HUD.action(action, i == _selected) then
       _selected = _selected == i and 0 or i
+      if _selected ~= 0 then
+        SFX.play "Usando ferramentas (CIA)"
+      end
     end
   end
   ANTIVIRUS_HUD.turnClock(_turn_cooldown/_TURN_TIME)
@@ -148,3 +154,4 @@ function ANTIVIRUS.iterateVirus()
 end
 
 return ANTIVIRUS
+
