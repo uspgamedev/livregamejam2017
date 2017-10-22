@@ -159,7 +159,7 @@ function focusBreadth(neighs)
   if fin.infectedPcs == fin.pcs then
 	fin.infected = true
   end
-  while (counter ~= 0 and not finish) do
+  while (counter <= 0.1 and not finish) do
     finish = true
     avg = counter/notFullNodes
     for i=2,#neighs do
