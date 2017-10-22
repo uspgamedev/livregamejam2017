@@ -50,12 +50,12 @@ local function getMidpoint(a, b)
   return {x, y}
 end
 
-function ANTIVIRUS.load()
+function ANTIVIRUS.load(virus_strategies)
   _selected = 0
   ANTIVIRUS_HUD.load()
 	GRAPH_UI.load(MAP_LOADER.getTotal())
   GRAPH_LOGIC.load(MAP_LOADER.getTotal())
-  GRAPH_LOGIC.setStrategy{0, 4, 1, 0}
+  GRAPH_LOGIC.setStrategy(virus_strategies)
   map = MAP_LOADER.getCurrMap()
   _intelNode = MAP_LOADER.getIntel()
 end
