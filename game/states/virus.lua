@@ -32,7 +32,7 @@ function VIRUS.update(dt)
     end
   end
   if VIRUS_MENU.confirm() then
-    newState(2, _strategies)
+    newState(_strategies)
     SFX.play "Compilar"
   end
 end

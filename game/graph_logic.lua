@@ -46,14 +46,6 @@ function GRAPH_LOGIC.newGame()
 	-- Reload the maps
 end
 
-local function verifyVictory()
-	if _virus_pts == 2 then
-		print("Virus won the match")
-	elseif _antivirus_pts == 2 then
-		print("CIA won the match")
-	end
-end
-
 function GRAPH_LOGIC.load(n)
   _nodes = {}
   _edges = {}
@@ -316,20 +308,18 @@ function GRAPH_LOGIC.turn()
 
   for i,node in ipairs(_nodes) do
     if DEBUG then
-      print(i, tostring(node.infectedPcs).."/"..tostring(node.pcs), node.infected, node.resetIn, node.probeResetIn)
+      --print(i, tostring(node.infectedPcs).."/"..tostring(node.pcs), node.infected, node.resetIn, node.probeResetIn)
     end
     if _nodes[i].hasIntel and _nodes[i].infected then
       print("Virus wins!!!")
-      setWhoWon("Hackx0rz")
-      _virus_pts = _virus_pts + 1
-      newState(1)
+      setWhoWon(0)
+      newState()
       return 1
     end
     if _nodes[i].hasIntel and _nodes[i].protected then
-      setWhoWon("Government")
       print("CIA wins!!!")
-      _antivirus_pts = _antivirus_pts + 1
-      newState(1)
+      setWhoWon(1)
+      newState()
       return 1
     end
   end

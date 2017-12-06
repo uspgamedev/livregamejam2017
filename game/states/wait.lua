@@ -13,7 +13,7 @@ end
 
 function WAIT.update(dt)
 	if MOUSE.clicked(1) then
-		newState(4, _states)
+		newState(_states)
 	end
 end
 
@@ -23,7 +23,7 @@ end
 
 function WAIT.keypressed(key)
 	if key == 'space' then
-		newState(4, _states)
+		newState(_states)
 	end
 end
 

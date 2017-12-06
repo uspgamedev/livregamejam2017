@@ -21,7 +21,7 @@ end
 
 function TITLE.keypressed(key)
 	if key == 'space' then
-		newState(nil, 5)
+		newState()
 	end
 end
 

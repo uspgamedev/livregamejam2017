@@ -19,7 +19,11 @@ function INTER_ROUND.update(dt)
 end
 
 function INTER_ROUND.draw()
-	TEXT_SCREEN.draw("Round won\n\n" .. "    " .. getWhoWon() .. " wins")
+	if verifyVictory() then
+		TEXT_SCREEN.draw("Match won\n\n" .. "    " .. getWhoWon() .. " wins")
+	else
+		TEXT_SCREEN.draw("Round won\n\n" .. "    " .. getWhoWon() .. " wins")
+	end
 end
 
 function INTER_ROUND.keypressed(key)
