@@ -58,7 +58,7 @@ function ANTIVIRUS.load(virus_strategies)
   GRAPH_LOGIC.load(MAP_LOADER.getTotal())
   GRAPH_LOGIC.setStrategy(virus_strategies)
   map = MAP_LOADER.getCurrMap()
-	GRAPH_UI.load(MAP_LOADER.getTotal(), map)
+  GRAPH_UI.load(MAP_LOADER.getTotal(), map)
   _intelNode = MAP_LOADER.getIntel()
 end
 
@@ -154,4 +154,3 @@ function ANTIVIRUS.iterateVirus()
 end
 
 return ANTIVIRUS
-

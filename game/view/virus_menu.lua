@@ -139,4 +139,3 @@ function VIRUS_MENU.draw()
 end
 
 return VIRUS_MENU
-

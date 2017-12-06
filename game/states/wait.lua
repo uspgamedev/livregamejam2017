@@ -4,14 +4,16 @@ local ANTIVIRUS = require 'states.antivirus'
 local MAP_LOADER = require 'map_loader'
 
 local WAIT = {}
+local _states
 
-function WAIT.load()
+function WAIT.load(states)
+	_states = states
 	TEXT_SCREEN.load()
 end
 
 function WAIT.update(dt)
 	if MOUSE.clicked(1) then
-		newState()
+		newState(4, _states)
 	end
 end
 
@@ -21,7 +23,7 @@ end
 
 function WAIT.keypressed(key)
 	if key == 'space' then
-		newState()
+		newState(4, _states)
 	end
 end
 

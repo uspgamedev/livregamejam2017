@@ -77,17 +77,17 @@ function GRAPH_LOGIC.load(n)
 		  _edges[i][j] = (j < i) and _edges[j][i] or newEdge(_testEdges[i][j])
 		end
   end
-  if DEBUG then
-    for i,line in ipairs(_edges) do
-      for j,edge in ipairs(_edges[i]) do
-        if not edge then
-          print(i, j, "false")
-        else
-          print(i, j, edge.weight)
-        end
-      end
-    end
-  end
+  --if DEBUG then
+    --for i,line in ipairs(_edges) do
+      --for j,edge in ipairs(_edges[i]) do
+        --if not edge then
+          --print(i, j, "false")
+        --else
+          --print(i, j, edge.weight)
+        --end
+      --end
+    --end
+  --end
 end
 
 function GRAPH_LOGIC.setStrategy(strat)
@@ -266,12 +266,12 @@ function moveVirus(type, neighNodes)
       _power = _power/_BOOST_FACTOR
     end
   end
-  for i,edge in ipairs(neighNodes) do
-	  print(i, tostring(edge.ini)..','..tostring(edge.fin), edge.passing)
-  end
-  for i,node in ipairs(_nodes) do
-    print(i, tostring(node.infectedPcs).."/"..tostring(node.pcs), node.infected, node.resetIn, node.probeResetIn)
-  end
+  --for i,edge in ipairs(neighNodes) do
+	  --print(i, tostring(edge.ini)..','..tostring(edge.fin), edge.passing)
+  --end
+  --for i,node in ipairs(_nodes) do
+    --print(i, tostring(node.infectedPcs).."/"..tostring(node.pcs), node.infected, node.resetIn, node.probeResetIn)
+  --end
   if type == 1 then
   	print('BFS')
   	breadth(neighNodes)
@@ -316,7 +316,7 @@ function GRAPH_LOGIC.turn()
 
   for i,node in ipairs(_nodes) do
     if DEBUG then
-    print(i, tostring(node.infectedPcs).."/"..tostring(node.pcs), node.infected, node.resetIn, node.probeResetIn)
+      print(i, tostring(node.infectedPcs).."/"..tostring(node.pcs), node.infected, node.resetIn, node.probeResetIn)
     end
     if _nodes[i].hasIntel and _nodes[i].infected then
       print("Virus wins!!!")
