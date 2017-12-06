@@ -27,7 +27,7 @@ local function mapUsed(map)
 	local i = 1
 	local used = false
 	for i=1, #_maps do
-		if _maps[i] == _current_map then
+		if _used_maps[i] == map then
 			used = true
 		end
 	end
@@ -43,14 +43,18 @@ function MAP_LOADER.loadMaps()
 		table.insert(_maps, require('maps.' .. file))
 	end
 	--Pick one map randomly to be the first map of the game
-	_current_map = _maps[3]
+	_current_map = _maps[love.math.random(1, #_maps)]
 	table.insert(_used_maps, _current_map)
+end
+
+function MAP_LOADER.reset_used()
+	_used_maps = {}
 end
 
 function MAP_LOADER.switchMap()
 	repeat
 		_current_map = _maps[love.math.random(1, #_maps)]
-	until (mapUsed(_current_map))
+	until (not mapUsed(_current_map))
 	table.insert(_used_maps, _current_map)
 end
 

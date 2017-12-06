@@ -47,14 +47,14 @@ function newState(...)
       _antivirus_pts = 0
       _virus_pts = 0
       counter = 1
+      MAP_LOADER.reset_used()
     else
-      print(_virus_pts, _antivirus_pts)
       counter = 2
     end
+    MAP_LOADER.switchMap()
   else
     counter = counter%#gamestates + 1
   end
-  print(counter)
   _state = gamestates[counter]
   _state.load(...)
 

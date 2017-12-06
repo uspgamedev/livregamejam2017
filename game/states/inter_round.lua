@@ -13,7 +13,6 @@ function INTER_ROUND.update(dt)
 	ANTIVIRUS.update(dt)
 
 	if MOUSE.clicked(1) then
-		MAP_LOADER.switchMap()
 		newState()
 	end
 end
@@ -28,7 +27,6 @@ end
 
 function INTER_ROUND.keypressed(key)
 	if key == 'space' then
-		MAP_LOADER.switchMap()
 		newState()
 	end
 end
