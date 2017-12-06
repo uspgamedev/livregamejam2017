@@ -31,7 +31,7 @@ function VIRUS.update(dt)
       SFX.play "Escolhendo hab virus"
     end
   end
-  if VIRUS_MENU.confirm() then
+  if VIRUS_MENU.confirm() and #_strategies ~= 0 then
     newState(_strategies)
     SFX.play "Compilar"
   end

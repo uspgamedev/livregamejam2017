@@ -69,17 +69,6 @@ function GRAPH_LOGIC.load(n)
 		  _edges[i][j] = (j < i) and _edges[j][i] or newEdge(_testEdges[i][j])
 		end
   end
-  --if DEBUG then
-    --for i,line in ipairs(_edges) do
-      --for j,edge in ipairs(_edges[i]) do
-        --if not edge then
-          --print(i, j, "false")
-        --else
-          --print(i, j, edge.weight)
-        --end
-      --end
-    --end
-  --end
 end
 
 function GRAPH_LOGIC.setStrategy(strat)
@@ -106,7 +95,7 @@ function distributeEqually(neighs, counter)
   local avg = counter/#neighs
   for i,edge in ipairs(neighs) do
     local fin = _nodes[edge.fin]
-    fin.infectedPcs = fin.infectedPcs + avg
+    fin.infectedPcs = math.max(math.min(fin.infectedPcs + avg, fin.pcs), 0)
     neighs[i].passing = neighs[i].passing - avg
     if fin.infectedPcs == fin.pcs then
       fin.infected = true
@@ -124,7 +113,7 @@ function breadth(neighs, counter, marked)
   while (counter ~= 0 and #neighs ~= 0) do
     table.sort(neighs, compareM)
     local fin = _nodes[neighs[#neighs].fin]
-    local add = math.min(fin.pcs-fin.infectedPcs, neighs[#neighs].passing)
+    local add = math.max(math.min(fin.pcs-fin.infectedPcs, neighs[#neighs].passing), 0)
     if (add*#neighs > counter) then
       distributeEqually(neighs, counter)
       return
@@ -134,7 +123,7 @@ function breadth(neighs, counter, marked)
       if marked[fin] then
         neighs[i] = nil
       elseif not fin.infected and neighs[i].passing ~= 0 then
-        fin.infectedPcs = fin.infectedPcs + add
+        fin.infectedPcs = math.max(math.min(fin.infectedPcs + add, fin.pcs), 0)
         neighs[i].passing = neighs[i].passing - add
         counter = counter - add
         if fin.infectedPcs == fin.pcs then
@@ -162,8 +151,8 @@ function random(neighs)
   local fin = _nodes[neighs[r].fin]
   while pcounter ~= 0 and ncounter ~= #neighs do
     if not fin.infected then
-      local add = math.min(fin.pcs-fin.infectedPcs, pcounter, neighs[r].passing)
-      fin.infectedPcs = fin.infectedPcs + add
+      local add = math.max(math.min(fin.pcs-fin.infectedPcs, pcounter, neighs[r].passing), 0)
+      fin.infectedPcs = math.max(math.min(fin.infectedPcs + add, fin.pcs), 0)
       pcounter = pcounter - add
       if fin.infectedPcs == fin.pcs then
         fin.resetIn = _resetInCons
@@ -265,33 +254,49 @@ function moveVirus(type, neighNodes)
     --print(i, tostring(node.infectedPcs).."/"..tostring(node.pcs), node.infected, node.resetIn, node.probeResetIn)
   --end
   if type == 1 then
-  	print('BFS')
+    if DEBUG then
+      print('BFS')
+    end
   	breadth(neighNodes)
   elseif type == 2 then
-  	print('Random')
+    if DEBUG then
+      print('Random')
+    end
   	random(neighNodes)
   elseif type == 0 then
-  	print('Depth greedy')
+    if DEBUG then
+      print('Depth greedy')
+    end
   	table.sort(neighNodes, compareD)
   	focusDepth(neighNodes)
   elseif type == 0 then
-  	print('Depth humble')
+    if DEBUG then
+      print('Depth humble')
+    end
   	table.sort(neighNodes, compareA)
   	focusDepth(neighNodes)
   elseif type == 0 then
-  	print('Beadth greedy')
+    if DEBUG then
+      print('Beadth greedy')
+    end
   	table.sort(neighNodes, compareD)
   	focusBreadth(neighNodes)
   elseif type == 0 then
-  	print('Beadth humble')
+    if DEBUG then
+      print('Beadth humble')
+    end
   	table.sort(neighNodes, compareA)
   	focusBreadth(neighNodes)
   elseif type == 3 then
-    print('Sleep')
+    if DEBUG then
+      print('Sleep')
+    end
     _sleeping = true
     _sleepResetIn = _SLEEP_MAX
   elseif type == 4 then
-    print('Boost')
+    if DEBUG then
+      print('Boost')
+    end
     _boost = true
     _boostResetIn = _BOOST_MAX
     _power = _power*_BOOST_FACTOR
